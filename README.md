@@ -7,8 +7,8 @@ way non-programmers (ie humans) expect lists to act (ie usability).
 
 * There is no 0 index.
 * This is no `shift` or `unshift`.
-* `.pop\_top()` and `.insert\_top()` is for the top. 
-* `.pop\_end()` and `.insert\_end()` is for the end of the list.
+* `.pop( 'first' )` and `.push('first', vals)` to attach before first element. 
+* `.pop( 'last'  )` and `.push('last',  vals)` to pop/insert after last element.
 * `.first()` and `.last()` are there. For now, they accept 
   *no* arguments.
 
@@ -17,8 +17,8 @@ Usage: Inserting
 
     var ha = require('humane_list');
     var stuff = new ha.Humane_List();
-    stuff.insert_end( "red" );
-    stuff.insert_end( "blue" );
+    stuff.push( "last", "red" );
+    stuff.push( "last", "blue" );
     stuff.last(); 
     // => "blue"
     
@@ -38,12 +38,6 @@ Usage: Investigatations
     stuff.has_key( "favorite" );
     // => true
 
-    stuff.insert(  15, "green" );
-    stuff.has_key( 15 );
-    // => true
-
-    stuff.has_key( 14 );
-    // => false, because we never set anything index 14.
 
 Usage: Deleting
 =============
@@ -54,10 +48,10 @@ Usage: Deleting
 
 No shift or unshift.
 
-    stuff.pop_top();
+    stuff.pop('first');
     // => "red"
     
-    stuff.insert_top( "red" );
+    stuff.insert( 'first', "red" );
     // => "red"
     
 

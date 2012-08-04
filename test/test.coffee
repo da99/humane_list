@@ -44,26 +44,26 @@ describe 'Inserting', () ->
 
   it 'can insert to the top', () ->
     l = new hl.Humane_List()
-    l.insert 'first', "def"
-    l.insert 'first', "abc"
+    l.push 'first', "def"
+    l.push 'first', "abc"
     assert.equal l.first(), "abc"
 
   it 'can insert at end', () ->
     l = new hl.Humane_List()
-    l.insert 'last', "second"
-    l.insert 'last', "first"
-    l.insert 'last', "third"
+    l.push 'last', "second"
+    l.push 'last', "first"
+    l.push 'last', "third"
     assert.equal l.last(), "third"
 
 # ============================================================================
 describe 'Merging', () ->
 
-  it 'can insert an array before first element', () ->
+  it 'can merge an array before first element', () ->
     l = new hl.Humane_List([1,2,3])
     l.merge 'first', [-2, -1, 0]
     assert.deepEqual l.values(), [-2, -1, 0, 1, 2, 3]
 
-  it 'can insert an object after last element', () ->
+  it 'can merge an object after last element', () ->
     l = new hl.Humane_List( one: 1, two: 2 )
     l.merge 'last', three: 3, four: 4
     assert.deepEqual l.values(), [1, 2, 3, 4]

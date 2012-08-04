@@ -19,7 +19,7 @@ class Humane_List
       return arr unless arr
       arr[1]
 
-  insert: (pos, v) ->
+  push: (pos, v) ->
     if pos.toString() is 'first'
       @core.unshift [ [] , v ]
     else
@@ -31,8 +31,6 @@ class Humane_List
   last: () ->
     @at_position(@core.length)
 
-  alias: (key, val) ->
-
   at_key: (k) ->
     target = v[1] for v in @core when v[0].indexOf(k) > -1
 
@@ -42,8 +40,6 @@ class Humane_List
 
   keys: () ->
     arr[0] for arr in @core
-
-  delete: (k) ->
 
   merge: (pos, o) ->
     new_core = if o && o.length
@@ -64,6 +60,10 @@ class Humane_List
     arr = @core[prog_index]
     return arr unless arr
     arr[1]
+
+  alias: (key, val) ->
+
+  delete: (k) ->
 
 
 
