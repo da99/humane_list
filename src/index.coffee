@@ -9,21 +9,21 @@ class Humane_List
     else
       (vals || [])
 
-  pop_top: () ->
-    arr = @core.shift()
-    return arr unless arr
-    arr[1]
+  pop: (pos) ->
+    if pos.toString() is 'first'
+      arr = @core.shift()
+      return arr unless arr
+      arr[1]
+    else
+      arr = @core.pop()
+      return arr unless arr
+      arr[1]
 
-  pop_end: () ->
-    arr = @core.pop()
-    return arr unless arr
-    arr[1]
-
-  insert_top: ( v ) ->
-    @core.unshift [ [] , v ]
-
-  insert_end: ( v ) ->
-    @core.push [ [] , v ]
+  insert: (pos, v) ->
+    if pos.toString() is 'first'
+      @core.unshift [ [] , v ]
+    else
+      @core.push [ [] , v ]
 
   first: () ->
     @at_position(1)
@@ -44,7 +44,19 @@ class Humane_List
   delete: (k) ->
 
   merge_top: () ->
+    
   merge_end: () ->
+    
+  merge: (o, pos) ->
+    new_core = if o && o.length
+      [ [], val ] for val in o
+    else
+      [ [key], val ] for key, val of o
+      
+    @core = if pos "top"
+      new_core.concat @core
+    else
+      @core.concat new_core
 
   values: () ->
     v[1] for v in @core

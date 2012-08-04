@@ -41,37 +41,38 @@ describe 'Inserting', () ->
 
   it 'can insert to the top', () ->
     l = new hl.Humane_List()
-    l.insert_top "def"
-    l.insert_top "abc"
+    l.insert 'first', "def"
+    l.insert 'first', "abc"
     assert.equal l.first(), "abc"
 
   it 'can insert at end', () ->
     l = new hl.Humane_List()
-    l.insert_top "second"
-    l.insert_top "first"
-    l.insert_end "third"
+    l.insert 'last', "second"
+    l.insert 'last', "first"
+    l.insert 'last', "third"
     assert.equal l.last(), "third"
+
 
 # ============================================================================
 describe 'Popping', () ->
 
   it 'can pop from the top', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    l.pop_top()
+    l.pop('first')
     assert.deepEqual l.values(), ['j', 'k', 'l']
     
   it 'returns value from the top', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    assert.equal l.pop_top(), 'h'
+    assert.equal l.pop('first'), 'h'
 
   it 'can pop from the end', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    l.pop_end()
+    l.pop('last')
     assert.deepEqual l.values(), ['h', 'j', 'k']
     
   it 'returns value from the end', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    assert.equal l.pop_end(), 'l'
+    assert.equal l.pop('last'), 'l'
 
 
 # ============================================================================
