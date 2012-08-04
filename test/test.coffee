@@ -35,6 +35,9 @@ describe 'Investigations', () ->
     l = new hl.Humane_List one: 1, two: 2, three: 3, four: 4
     assert.equal l.has_key('one'), true
 
+  it '.keys() returns keys in original order', () ->
+    l = new hl.Humane_List( one: 1, two: 2, three: 3)
+    assert.deepEqual l.keys(), [ ['one'], ['two'], ['three'] ]
 
 # ============================================================================
 describe 'Inserting', () ->
@@ -52,7 +55,24 @@ describe 'Inserting', () ->
     l.insert 'last', "third"
     assert.equal l.last(), "third"
 
+# ============================================================================
+describe 'Merging', () ->
 
+  it 'can insert an array before first element', () ->
+    l = new hl.Humane_List([1,2,3])
+    l.merge 'first', [-2, -1, 0]
+    assert.deepEqual l.values(), [-2, -1, 0, 1, 2, 3]
+
+  it 'can insert an object after last element', () ->
+    l = new hl.Humane_List( one: 1, two: 2 )
+    l.merge 'last', three: 3, four: 4
+    assert.deepEqual l.values(), [1, 2, 3, 4]
+
+  it 'keeps order of keys when merging objects', () ->
+    l = new hl.Humane_List( uno: 1, dos: 2 )
+    l.merge 'first', neg_one: -1, zero: 0
+    assert.deepEqual l.keys(), [ ["neg_one"], ["zero"], ["uno"], ["dos"] ]
+    
 # ============================================================================
 describe 'Popping', () ->
 

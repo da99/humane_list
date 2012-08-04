@@ -40,20 +40,18 @@ class Humane_List
     target = true for v in @core when k in v[0]
     target or false
 
-    
+  keys: () ->
+    arr[0] for arr in @core
+
   delete: (k) ->
 
-  merge_top: () ->
-    
-  merge_end: () ->
-    
-  merge: (o, pos) ->
+  merge: (pos, o) ->
     new_core = if o && o.length
       [ [], val ] for val in o
     else
       [ [key], val ] for key, val of o
       
-    @core = if pos "top"
+    @core = if pos.toString() is "first"
       new_core.concat @core
     else
       @core.concat new_core
