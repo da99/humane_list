@@ -17,7 +17,7 @@ describe 'Initialization', () ->
     assert.deepEqual l.values(), [1,2,3,4]
 
 # ============================================================================
-describe 'Endpoints, top/bottom', () ->
+describe 'Investigations', () ->
   
   it 'retrieves first value', () ->
     l = new hl.Humane_List( [3,4,5] )
@@ -26,6 +26,15 @@ describe 'Endpoints, top/bottom', () ->
   it 'retrieves last value', () ->
     l = new hl.Humane_List( [6, 7, 8] )
     assert.equal l.last(), 8
+
+  it 'returns false if not .has_key', () ->
+    l = new hl.Humane_List uno: 1, two: 2, three: 3, four: 4
+    assert.equal l.has_key('one'), false
+
+  it 'returns true if .has_key', () ->
+    l = new hl.Humane_List one: 1, two: 2, three: 3, four: 4
+    assert.equal l.has_key('one'), true
+
 
 # ============================================================================
 describe 'Inserting', () ->
@@ -64,4 +73,12 @@ describe 'Popping', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
     assert.equal l.pop_end(), 'l'
 
+
+# ============================================================================
+describe 'Retrieving values using keys', () ->
+
+  it 'returns value', () ->
+    l = new hl.Humane_List one: 1, dos: 2, three: 3, four: 4
+    assert.equal l.at_key("dos"), 2
     
+

@@ -33,10 +33,12 @@ class Humane_List
 
   alias: (key, val) ->
 
-  get: (k) ->
+  at_key: (k) ->
     target = v[1] for v in @core when v[0].indexOf(k) > -1
 
   has_key: (k) ->
+    target = true for v in @core when k in v[0]
+    target or false
 
     
   delete: (k) ->
@@ -52,7 +54,6 @@ class Humane_List
     arr = @core[prog_index]
     return arr unless arr
     arr[1]
-
 
 
 
