@@ -63,6 +63,11 @@ describe 'Deleting', () ->
     l.delete_at 2
     assert.deepEqual l.values(), [1, l.undefined, 3]
 
+  it 'removes value by given key', () ->
+    l = new hl.Humane_List one: 1, dos: 2, trey: 3
+    l.delete_at "trey"
+    assert.deepEqual l.values(), [1, 2, l.undefined]
+
 # ============================================================================
 describe 'Merging', () ->
 
