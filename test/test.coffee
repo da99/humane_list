@@ -56,6 +56,14 @@ describe 'Inserting', () ->
     assert.equal l.last(), "third"
 
 # ============================================================================
+describe 'Deleting', () ->
+
+  it 'removes value at a given position', () ->
+    l = new hl.Humane_List [1, 2, 3]
+    l.delete_at 2
+    assert.deepEqual l.values(), [1, l.undefined, 3]
+
+# ============================================================================
 describe 'Merging', () ->
 
   it 'can merge an array before first element', () ->

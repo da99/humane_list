@@ -33,6 +33,12 @@ class Humane_List
 
   at_key: (k) ->
     target = v[1] for v in @core when v[0].indexOf(k) > -1
+    
+  at_position: (n) ->
+    prog_index = (n or 1) - 1
+    arr = @core[prog_index]
+    return arr unless arr
+    arr[1]
 
   has_key: (k) ->
     target = true for v in @core when k in v[0]
@@ -54,17 +60,21 @@ class Humane_List
 
   values: () ->
     v[1] for v in @core
-    
-  at_position: (n) ->
-    prog_index = (n or 1) - 1
-    arr = @core[prog_index]
-    return arr unless arr
-    arr[1]
 
   alias: (key, val) ->
 
-  delete: (k) ->
-
+  delete_at: (target_k) ->
+    if typeof(target_k) is "number"
+      target_k -= 1
+      
+    pos = k for v, k in @core when (k is target_k ) or ( target_k in v[0] )
+    return pos if typeof(pos) is "undefined"
+    
+    @core[pos] = [ [], @core.undefined ]
+    return( @at_position(pos) )
 
 
 exports.Humane_List = Humane_List
+
+
+

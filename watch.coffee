@@ -1,10 +1,14 @@
+#!/usr/bin/env coffee
+# -*- coffee -*-
+# 
+
 
 spawn  = require('child_process').spawn
 fs     = require 'fs'
 this_folder = process.cwd()
 
 buff = (buffer) ->
-  console.log buffer.toString()
+  process.stdout.write(buffer.toString()); 
   
 runCommand = (name, str_args, f, after) ->
   console.log "running: #{name} #{str_args}"
@@ -35,20 +39,27 @@ watch_files = () ->
 
 #  ============ Check if node_modules dir needs to be created.
 
+watch_files = () ->
+  hl  = require 'humane_list'
+  watch  = require 'nodewatch'
+  watch.add("./test").add("./src").onChange () ->
+    runCommand 'coffee', '--output lib/ -c src/', null, (buffer) ->
+      runCommand "mocha", '--colors --compilers coffee:coffee-script'
+
 
 node_modules = "#{this_folder}/node_modules"
 
 if fs.existsSync("package.json") and !fs.existsSync(node_modules)
-  fs.mkdirSync(node_modules)
   runCommand "npm", "install", null, () ->
-    for name in fs.readdirSync(node_modules) 
-      path = "#{node_modules}/#{name}"
-      if fs.existsSync("../#{name}/package.json")
-        fs.rmdirSync   path
-        fs.symlinkSync "#{fs.realpathSync '..'}/#{name}", path
-        
-    fs.symlinkSync this_folder, "#{node_modules}/#{this_folder.split("/").pop()}"
-    watch_files()
+    runCommand "npm", "link nodewatch", null, () ->
+      for name in fs.readdirSync(node_modules) 
+        path = "#{node_modules}/#{name}"
+        if fs.existsSync("../#{name}/package.json")
+          fs.rmdirSync   path
+          fs.symlinkSync "#{fs.realpathSync '..'}/#{name}", path
+          
+      fs.symlinkSync this_folder, "#{node_modules}/#{this_folder.split("/").pop()}"
+      watch_files()
 
 else
   watch_files()
