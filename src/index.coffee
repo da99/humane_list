@@ -95,11 +95,9 @@ class Humane_List
     nickname
 
   delete_at: (target_k) ->
-    if typeof(target_k) is "number"
-      target_k -= 1
-      
-    pos = k for v, k in @core when (k is target_k ) or ( target_k in v[0] )
-    return pos if typeof(pos) is "undefined"
+    pos = @get_computer_position(target_k)
+    row = @core[pos]
+    return row unless row
     
     @core[pos] = [ [], @core.undefined ]
     return( @at_position(pos) )

@@ -5,6 +5,9 @@ hl = require "humane_list"
 must_equal = (a, e) ->
   assert.deepEqual a, e
 
+assert_undef = (v) ->
+  assert.equal typeof(v), 'undefined'
+  
 # ============================================================================
 describe 'Initialization', () ->
 
@@ -41,7 +44,7 @@ describe 'Investigations', () ->
 
   it '.at_key() returns undefined if key not found.', () ->
     l = new hl.Humane_List( one: 1, two: 2, three: 3)
-    assert.equal typeof(l.at_key 'uno'), 'undefined'
+    assert_undef l.at_key('uno')
 
 # ============================================================================
 describe 'Inserting', () ->
@@ -94,7 +97,7 @@ describe 'Aliasing:', () ->
 
     it 'returns undefined if no alias is found', () ->
       l = new hl.Humane_List one: 1, two: 2, three: 3, four: 4
-      assert.equal typeof(l.at_key("trey")), 'undefined'
+      assert_undef l.at_key("trey")
 
   describe '.remove_alias(k):', () ->
     it 'removes alias, but not the value.', () ->
@@ -102,7 +105,7 @@ describe 'Aliasing:', () ->
       l = new hl.Humane_List one: 1, two: 2, three: 3, four: 4
       l.alias "three", alias
       l.remove_alias alias
-      assert.equal typeof(l.at_key alias), 'undefined'
+      assert_undef(l.at_key alias)
     
 # ============================================================================
 describe 'Deleting', () ->
