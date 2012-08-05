@@ -39,6 +39,10 @@ describe 'Investigations', () ->
     l = new hl.Humane_List( one: 1, two: 2, three: 3)
     assert.deepEqual l.keys(), [ ['one'], ['two'], ['three'] ]
 
+  it '.at_key() returns undefined if key not found.', () ->
+    l = new hl.Humane_List( one: 1, two: 2, three: 3)
+    assert.equal typeof(l.at_key 'uno'), 'undefined'
+
 # ============================================================================
 describe 'Inserting', () ->
 
@@ -55,6 +59,51 @@ describe 'Inserting', () ->
     l.push 'last', "third"
     assert.equal l.last(), "third"
 
+# ============================================================================
+describe 'Aliasing:', () ->
+
+  describe '.alias(k, alias):', () ->
+
+    it 'can add an alias based on numbered position', () ->
+      l = new hl.Humane_List [1, 2, 3]
+      l.alias 2, "TWO"
+      assert.equal l.at_key("TWO"), 2
+
+    it 'can add an alias based on key', () ->
+      l = new hl.Humane_List one: 1, two: 2, three: 3, four: 4
+      l.alias "three", "trey"
+      assert.equal l.at_key("trey"), 3
+
+    it 'does not add alias if duplicate key', () ->
+      l = new hl.Humane_List one: 1, two: 2
+      l.alias "two", "dos"
+      l.alias "two", "dos"
+      assert.deepEqual l.keys(), [["one"], ["two", "dos"]]
+      
+    it 'raises error if key/pos does not exist', () ->
+      err = null
+      try
+        l = new hl.Humane_List one: 1, two: 2, three: 3, five: 5
+        l.alias "four", "quad"
+      catch e
+        err = e
+
+      assert.equal err.message, "Key/pos is not defined: four"
+
+  describe '.at_key(k):', () ->
+
+    it 'returns undefined if no alias is found', () ->
+      l = new hl.Humane_List one: 1, two: 2, three: 3, four: 4
+      assert.equal typeof(l.at_key("trey")), 'undefined'
+
+  describe '.remove_alias(k):', () ->
+    it 'removes alias, but not the value.', () ->
+      alias = "trey"
+      l = new hl.Humane_List one: 1, two: 2, three: 3, four: 4
+      l.alias "three", alias
+      l.remove_alias alias
+      assert.equal typeof(l.at_key alias), 'undefined'
+    
 # ============================================================================
 describe 'Deleting', () ->
 

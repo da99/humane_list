@@ -33,6 +33,7 @@ class Humane_List
 
   at_key: (k) ->
     target = v[1] for v in @core when v[0].indexOf(k) > -1
+    target
     
   at_position: (n) ->
     prog_index = (n or 1) - 1
@@ -61,7 +62,37 @@ class Humane_List
   values: () ->
     v[1] for v in @core
 
-  alias: (key, val) ->
+  to_key_or_computer_position: (key_or_human_pos) ->
+    if typeof(key_or_human_pos) is 'number'
+      return key_or_human_pos - 1
+    key_or_human_pos
+
+  get_computer_position: (key_or_human_pos) ->
+    key_or_pos = @to_key_or_computer_position(key_or_human_pos)
+    return key_or_pos unless key_or_pos
+    pos = k for v, k in @core when (k is key_or_pos ) or ( key_or_pos in v[0] )
+    pos
+
+  get_computer_position_or_throw: (key_or_human_pos) ->
+    pos  = @get_computer_position(key_or_human_pos)
+    if !pos
+      throw new Error("Key/pos is not defined: #{key_or_human_pos}")
+    pos
+    
+  alias: (key_or_pos, nickname) ->
+    pos = @get_computer_position_or_throw(key_or_pos)
+    keys = @core[pos][0]
+    return nickname if nickname in keys
+    keys.push nickname
+    
+  remove_alias: (nickname) ->
+    pos  = @get_computer_position(nickname)
+    return pos unless pos
+    row  = @core[pos]
+    keys = row[0]
+    new_keys = v for v in keys when v != nickname
+    row[0] = new_keys
+    nickname
 
   delete_at: (target_k) ->
     if typeof(target_k) is "number"
