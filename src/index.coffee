@@ -1,66 +1,96 @@
 
 class Humane_List
 
+  Element: class Element
+
+    constructor: () ->
+
+      switch arguments.length
+        when 1
+          @keys = []
+          @val = arguments[0]
+        when 2
+          @keys = arguments[0]
+          @val  = arguments[1]
+        when 3
+          @pos  = arguments[0]
+          @keys = arguments[1]
+          @val  = arguments[2]
+          
+        else
+          throw new Error("Unknown quantity of arguments: #{arguments}")
+        
+      @keys = if @keys.shift
+        @keys
+      else
+        [@keys]
+
+    to_array: () ->
+      [ @keys, @val ]
+
+    remove_alias: (alias) ->
+      @keys = (k for k in @keys when k != alias)
+      
   constructor: ( vals ) ->
-    @core = if vals && vals.length
-      [ [], v ] for v in vals
+
+    @core = if vals && vals.shift
+      ( (new @Element v) for v in vals )
     else if vals
-      [ [k], v ] for k, v of vals
+      ( (new @Element k, v) for k, v of vals )
     else
-      (vals || [])
+      []
 
   pop: (pos) ->
-    if pos.toString() is 'first'
-      arr = @core.shift()
-      return arr unless arr
-      arr[1]
+    arr = if pos.toString() is 'first'
+      @core.shift()
     else
-      arr = @core.pop()
-      return arr unless arr
-      arr[1]
+      @core.pop()
+      
+    return arr unless arr
+    arr.val
 
   push: (pos, v) ->
+    e = ( new @Element v )
     if pos.toString() is 'first'
-      @core.unshift [ [] , v ]
+      @core.unshift e
     else
-      @core.push [ [] , v ]
+      @core.push e
 
-  first: () ->
-    @at_position(1)
+  left: () ->
+    @core[0] and @core[0].val
 
-  last: () ->
-    @at_position(@core.length)
+  right: () ->
+    row = @core[@core.length - 1]
+    row and row.val
 
   at_key: (k) ->
-    target = v[1] for v in @core when v[0].indexOf(k) > -1
-    target
+    v = ele.val for ele in @core when k in ele.keys
+    v
     
   at_position: (n) ->
-    prog_index = (n or 1) - 1
-    arr = @core[prog_index]
-    return arr unless arr
-    arr[1]
+    comp_pos = @to_key_or_computer_position(n)
+    @core[comp_pos] && @core[comp_pos].val
 
   has_key: (k) ->
-    target = true for v in @core when k in v[0]
-    target or false
+    found = (v.keys for v in @core when k in v.keys)
+    found.length > 0
 
   keys: () ->
-    arr[0] for arr in @core
+    (ele.keys for ele in @core)
+    
+  values: () ->
+    (v.val for v in @core)
 
   merge: (pos, o) ->
-    new_core = if o && o.length
-      [ [], val ] for val in o
+    new_core = if o && o.shift
+      (new @Element( val)) for val in o
     else
-      [ [key], val ] for key, val of o
+      (new @Element( key,  val)) for key, val of o
       
     @core = if pos.toString() is "first"
       new_core.concat @core
     else
       @core.concat new_core
-
-  values: () ->
-    v[1] for v in @core
 
   to_key_or_computer_position: (key_or_human_pos) ->
     if typeof(key_or_human_pos) is 'number'
@@ -70,7 +100,7 @@ class Humane_List
   get_computer_position: (key_or_human_pos) ->
     key_or_pos = @to_key_or_computer_position(key_or_human_pos)
     return key_or_pos unless key_or_pos
-    pos = k for v, k in @core when (k is key_or_pos ) or ( key_or_pos in v[0] )
+    pos = k for v, k in @core when (k is key_or_pos ) or ( key_or_pos in v.keys )
     pos
 
   get_computer_position_or_throw: (key_or_human_pos) ->
@@ -81,17 +111,13 @@ class Humane_List
     
   alias: (key_or_pos, nickname) ->
     pos = @get_computer_position_or_throw(key_or_pos)
-    keys = @core[pos][0]
+    keys = @core[pos].keys
     return nickname if nickname in keys
     keys.push nickname
     
   remove_alias: (nickname) ->
-    pos  = @get_computer_position(nickname)
-    return pos unless pos
-    row  = @core[pos]
-    keys = row[0]
-    new_keys = v for v in keys when v != nickname
-    row[0] = new_keys
+    for ele in @core
+      ele.remove_alias nickname
     nickname
 
   delete_at: (target_k) ->
@@ -99,8 +125,9 @@ class Humane_List
     row = @core[pos]
     return row unless row
     
-    @core[pos] = [ [], @core.undefined ]
-    return( @at_position(pos) )
+    old = @at_position(pos)
+    @core = (v for v,k in @core when k != pos)
+    old
 
 
 exports.Humane_List = Humane_List
