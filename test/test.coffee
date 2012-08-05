@@ -67,6 +67,30 @@ describe 'Pushing', () ->
     l.push 'end', "third"
     assert.equal l.end(), "third"
 
+  it 'can insert at a specified position', () ->
+    l = new hl.Humane_List [1, 3, 4]
+    l.push 2, "dos"
+    assert.deepEqual l.values(), [1, "dos", 3, 4]
+
+  it 'sets a default position of 1 for first element w/o defined position', () ->
+    l = new hl.Humane_List
+    l.push 'front', "one"
+    assert.deepEqual l.positions(), [1]
+
+  it 'sets a default position of .length+1 for pushing to end', () ->
+    l = new hl.Humane_List [1,2,3]
+    l.push 'end', "four"
+    assert.deepEqual l.positions(), [1,2,3,4]
+
+
+  it 'adds one to all succeeding positions until positions are unique', () ->
+    l = new hl.Humane_List [1, 2, 3]
+    l.push 2.1, "2.1"
+    l.push 2, "dos"
+    l.push 5, "five"
+    assert.deepEqual l.values(),    [ 1, "dos", 2, 2.1, 3, 'five']
+    assert.deepEqual l.positions(), [ 1,  2, 3, 3.1, 4, 5]
+
   it 'can insert both a key and value', () ->
     l = new hl.Humane_List()
     l.push 'front', "three", 3
@@ -74,7 +98,7 @@ describe 'Pushing', () ->
     l.push 'front', "one", 1
 
     assert.deepEqual l.values(), [1, 2, 3]
-    assert.deepEqual l.keys(), [ ['one'], ['two'], ['three'] ]
+    assert.deepEqual l.keys(),   [ ['one'], ['two'], ['three'] ]
 
 # ============================================================================
 describe 'Popping', () ->
@@ -160,19 +184,19 @@ describe 'Deleting', () ->
 # ============================================================================
 describe 'Merging', () ->
 
-  it 'can merge an array before first element', () ->
+  it 'can concat an array before first element', () ->
     l = new hl.Humane_List([1,2,3])
-    l.merge 'front', [-2, -1, 0]
+    l.concat 'front', [-2, -1, 0]
     assert.deepEqual l.values(), [-2, -1, 0, 1, 2, 3]
 
-  it 'can merge an object after last element', () ->
+  it 'can concat an object after last element', () ->
     l = new hl.Humane_List( one: 1, two: 2 )
-    l.merge 'end', three: 3, four: 4
+    l.concat 'end', three: 3, four: 4
     assert.deepEqual l.values(), [1, 2, 3, 4]
 
   it 'keeps order of keys when merging objects', () ->
     l = new hl.Humane_List( uno: 1, dos: 2 )
-    l.merge 'front', neg_one: -1, zero: 0
+    l.concat 'front', neg_one: -1, zero: 0
     assert.deepEqual l.keys(), [ ["neg_one"], ["zero"], ["uno"], ["dos"] ]
     
 

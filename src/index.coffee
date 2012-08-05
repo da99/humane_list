@@ -32,13 +32,15 @@ class Humane_List
       @keys = (k for k in @keys when k != alias)
       
   constructor: ( vals ) ->
-
-    @core = if vals && vals.shift
-      ( (new @Element v) for v in vals )
+    @core = []
+    
+    if vals && vals.shift
+      @push('end', v) for v in vals
+        
+        
     else if vals
-      ( (new @Element k, v) for k, v of vals )
-    else
-      []
+      @push('end', k, v) for k, v of vals
+        
 
   pop: (pos) ->
     arr = if pos.toString() is 'front'
@@ -52,18 +54,71 @@ class Humane_List
   push: () ->
     args = arguments
     pos = args[0]
+    num_pos = if typeof(pos) is "number"
+      pos
+    else
+      if pos is 'front'
+        1
+      else
+        last = @positions().pop()
+        (last && (last + 1)) || @core.length + 1
+
+    # Create new element.
     switch args.length
       when 2
-        e   = ( new @Element args[1] )
+        e = if num_pos
+          ( new @Element num_pos, [], args[1] )
+        else
+          ( new @Element args[1] )
+          
       when 3
-        e   = ( new @Element args[1], args[2] )
+        e = if num_pos
+          ( new @Element num_pos, args[1], args[2] )
+        else
+          ( new @Element args[1], args[2] )
+          
       else
         throw( new Error("Invalid arguments: #{arguments}") )
         
-    if pos.toString() is 'front'
-      @core.unshift e
+      
+      
+    # Insert new element at correct position
+    new_core = []
+    add_one  = false
+    
+    @core = if @core.length is 0
+      [e]
     else
-      @core.push e
+      inserted   = false
+      add_one    = false
+      
+      for v, i in @core
+        human = i + 1
+        if num_pos <= human and !inserted
+          new_core.push e
+          inserted = true
+          add_one = true
+          
+        new_core.push v
+        
+      if !inserted
+        new_core.push e
+        
+      new_core
+        
+    @core = @core.sort (a,b) ->
+      a.pos > b.pos
+      
+    # Update positions.
+    if @core.length > 1
+      for last_v, i in @core
+        v = @core[i+1]
+        if v
+          if last_v.pos >= v.pos 
+            v.pos += 1
+      
+
+    e.pos
 
   front: () ->
     @core[0] and @core[0].val
@@ -84,22 +139,24 @@ class Humane_List
     found = (v.keys for v in @core when k in v.keys)
     found.length > 0
 
+  positions: () ->
+    (v.pos for v in @core)
+
   keys: () ->
     (ele.keys for ele in @core)
     
   values: () ->
     (v.val for v in @core)
 
-  merge: (pos, o) ->
-    new_core = if o && o.shift
-      (new @Element( val)) for val in o
+  concat: (pos, o) ->
+    if o.shift
+      positions = (i for v, i in o)
+      positions = positions.reverse() if pos is 'front'
+      @push(pos, o[i]) for i in positions
     else
-      (new @Element( key,  val)) for key, val of o
-      
-    @core = if pos.toString() is "front"
-      new_core.concat @core
-    else
-      @core.concat new_core
+      keys = (key for key, val of o)
+      keys = keys.reverse() if pos is 'front'
+      @push(pos, key, o[key]) for key in keys
 
   to_key_or_computer_position: (key_or_human_pos) ->
     if typeof(key_or_human_pos) is 'number'
