@@ -81,31 +81,10 @@ class Humane_List
         throw( new Error("Invalid arguments: #{arguments}") )
         
       
-      
-    # Insert new element at correct position
-    new_core = []
-    add_one  = false
+    # Insert new element at front.
+    @core.unshift e
     
-    @core = if @core.length is 0
-      [e]
-    else
-      inserted   = false
-      add_one    = false
-      
-      for v, i in @core
-        human = i + 1
-        if num_pos <= human and !inserted
-          new_core.push e
-          inserted = true
-          add_one = true
-          
-        new_core.push v
-        
-      if !inserted
-        new_core.push e
-        
-      new_core
-        
+    # Sort based on human position.
     @core = @core.sort (a,b) ->
       a.pos > b.pos
       
@@ -114,7 +93,7 @@ class Humane_List
       for last_v, i in @core
         v = @core[i+1]
         if v
-          if last_v.pos >= v.pos 
+          if last_v.pos >= v.pos
             v.pos += 1
       
 
