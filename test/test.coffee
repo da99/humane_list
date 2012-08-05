@@ -22,10 +22,10 @@ describe 'Initialization', () ->
 # ============================================================================
 describe 'Inspecting', () ->
   
-  describe '.left()', () ->
+  describe '.front()', () ->
     it 'retrieves first value', () ->
       l = new hl.Humane_List( [3,4,5] )
-      assert.equal l.left(), 3
+      assert.equal l.front(), 3
 
   describe '.right()', () ->
     it 'retrieves last value', () ->
@@ -56,9 +56,9 @@ describe 'Inserting', () ->
 
   it 'can insert to the top', () ->
     l = new hl.Humane_List()
-    l.push 'left', "def"
-    l.push 'left', "abc"
-    assert.equal l.left(), "abc"
+    l.push 'front', "def"
+    l.push 'front', "abc"
+    assert.equal l.front(), "abc"
 
   it 'can insert at end', () ->
     l = new hl.Humane_List()
@@ -132,7 +132,7 @@ describe 'Merging', () ->
 
   it 'can merge an array before first element', () ->
     l = new hl.Humane_List([1,2,3])
-    l.merge 'left', [-2, -1, 0]
+    l.merge 'front', [-2, -1, 0]
     assert.deepEqual l.values(), [-2, -1, 0, 1, 2, 3]
 
   it 'can merge an object after last element', () ->
@@ -142,7 +142,7 @@ describe 'Merging', () ->
 
   it 'keeps order of keys when merging objects', () ->
     l = new hl.Humane_List( uno: 1, dos: 2 )
-    l.merge 'left', neg_one: -1, zero: 0
+    l.merge 'front', neg_one: -1, zero: 0
     assert.deepEqual l.keys(), [ ["neg_one"], ["zero"], ["uno"], ["dos"] ]
     
 # ============================================================================
@@ -150,12 +150,12 @@ describe 'Popping', () ->
 
   it 'can pop from the top', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    l.pop('left')
+    l.pop('front')
     assert.deepEqual l.values(), ['j', 'k', 'l']
     
   it 'returns value from the top', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    assert.equal l.pop('left'), 'h'
+    assert.equal l.pop('front'), 'h'
 
   it 'can pop from the end', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']

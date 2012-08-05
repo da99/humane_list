@@ -41,7 +41,7 @@ class Humane_List
       []
 
   pop: (pos) ->
-    arr = if pos.toString() is 'left'
+    arr = if pos.toString() is 'front'
       @core.shift()
     else
       @core.pop()
@@ -51,12 +51,12 @@ class Humane_List
 
   push: (pos, v) ->
     e = ( new @Element v )
-    if pos.toString() is 'left'
+    if pos.toString() is 'front'
       @core.unshift e
     else
       @core.push e
 
-  left: () ->
+  front: () ->
     @core[0] and @core[0].val
 
   right: () ->
@@ -87,7 +87,7 @@ class Humane_List
     else
       (new @Element( key,  val)) for key, val of o
       
-    @core = if pos.toString() is "left"
+    @core = if pos.toString() is "front"
       new_core.concat @core
     else
       @core.concat new_core
