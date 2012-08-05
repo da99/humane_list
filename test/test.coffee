@@ -27,10 +27,10 @@ describe 'Inspecting', () ->
       l = new hl.Humane_List( [3,4,5] )
       assert.equal l.front(), 3
 
-  describe '.right()', () ->
+  describe '.end()', () ->
     it 'retrieves last value', () ->
       l = new hl.Humane_List( [6, 7, 8] )
-      assert.equal l.right(), 8
+      assert.equal l.end(), 8
 
   describe '.has_key(k)', () ->
     it 'returns false if key not found', () ->
@@ -62,10 +62,10 @@ describe 'Inserting', () ->
 
   it 'can insert at end', () ->
     l = new hl.Humane_List()
-    l.push 'right', "second"
-    l.push 'right', "first"
-    l.push 'right', "third"
-    assert.equal l.right(), "third"
+    l.push 'end', "second"
+    l.push 'end', "first"
+    l.push 'end', "third"
+    assert.equal l.end(), "third"
 
 # ============================================================================
 describe 'Aliasing:', () ->
@@ -137,7 +137,7 @@ describe 'Merging', () ->
 
   it 'can merge an object after last element', () ->
     l = new hl.Humane_List( one: 1, two: 2 )
-    l.merge 'right', three: 3, four: 4
+    l.merge 'end', three: 3, four: 4
     assert.deepEqual l.values(), [1, 2, 3, 4]
 
   it 'keeps order of keys when merging objects', () ->
@@ -159,12 +159,12 @@ describe 'Popping', () ->
 
   it 'can pop from the end', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    l.pop('right')
+    l.pop('end')
     assert.deepEqual l.values(), ['h', 'j', 'k']
     
   it 'returns value from the end', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    assert.equal l.pop('right'), 'l'
+    assert.equal l.pop('end'), 'l'
 
 
 # ============================================================================
