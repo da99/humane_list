@@ -52,7 +52,7 @@ describe 'Inspecting', () ->
       assert_undef l.at_key('uno')
 
 # ============================================================================
-describe 'Inserting', () ->
+describe 'Pushing', () ->
 
   it 'can insert to the top', () ->
     l = new hl.Humane_List()
@@ -66,6 +66,36 @@ describe 'Inserting', () ->
     l.push 'end', "first"
     l.push 'end', "third"
     assert.equal l.end(), "third"
+
+  it 'can insert both a key and value', () ->
+    l = new hl.Humane_List()
+    l.push 'front', "three", 3
+    l.push 'front', "two", 2
+    l.push 'front', "one", 1
+
+    assert.deepEqual l.values(), [1, 2, 3]
+    assert.deepEqual l.keys(), [ ['one'], ['two'], ['three'] ]
+
+# ============================================================================
+describe 'Popping', () ->
+
+  it 'can pop from the top', () ->
+    l = new hl.Humane_List ['h', 'j', 'k', 'l']
+    l.pop('front')
+    assert.deepEqual l.values(), ['j', 'k', 'l']
+    
+  it 'returns value from the top', () ->
+    l = new hl.Humane_List ['h', 'j', 'k', 'l']
+    assert.equal l.pop('front'), 'h'
+
+  it 'can pop from the end', () ->
+    l = new hl.Humane_List ['h', 'j', 'k', 'l']
+    l.pop('end')
+    assert.deepEqual l.values(), ['h', 'j', 'k']
+    
+  it 'returns value from the end', () ->
+    l = new hl.Humane_List ['h', 'j', 'k', 'l']
+    assert.equal l.pop('end'), 'l'
 
 # ============================================================================
 describe 'Aliasing:', () ->
@@ -145,27 +175,6 @@ describe 'Merging', () ->
     l.merge 'front', neg_one: -1, zero: 0
     assert.deepEqual l.keys(), [ ["neg_one"], ["zero"], ["uno"], ["dos"] ]
     
-# ============================================================================
-describe 'Popping', () ->
-
-  it 'can pop from the top', () ->
-    l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    l.pop('front')
-    assert.deepEqual l.values(), ['j', 'k', 'l']
-    
-  it 'returns value from the top', () ->
-    l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    assert.equal l.pop('front'), 'h'
-
-  it 'can pop from the end', () ->
-    l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    l.pop('end')
-    assert.deepEqual l.values(), ['h', 'j', 'k']
-    
-  it 'returns value from the end', () ->
-    l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    assert.equal l.pop('end'), 'l'
-
 
 # ============================================================================
 describe 'Retrieving values using keys', () ->

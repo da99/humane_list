@@ -49,8 +49,17 @@ class Humane_List
     return arr unless arr
     arr.val
 
-  push: (pos, v) ->
-    e = ( new @Element v )
+  push: () ->
+    args = arguments
+    pos = args[0]
+    switch args.length
+      when 2
+        e   = ( new @Element args[1] )
+      when 3
+        e   = ( new @Element args[1], args[2] )
+      else
+        throw( new Error("Invalid arguments: #{arguments}") )
+        
     if pos.toString() is 'front'
       @core.unshift e
     else
@@ -59,7 +68,7 @@ class Humane_List
   front: () ->
     @core[0] and @core[0].val
 
-  right: () ->
+  end: () ->
     row = @core[@core.length - 1]
     row and row.val
 
