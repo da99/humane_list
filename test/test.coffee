@@ -20,31 +20,36 @@ describe 'Initialization', () ->
     assert.deepEqual l.values(), [1,2,3,4]
 
 # ============================================================================
-describe 'Investigations', () ->
+describe 'Inspecting', () ->
   
-  it 'retrieves first value', () ->
-    l = new hl.Humane_List( [3,4,5] )
-    assert.equal l.left(), 3
+  describe '.left()', () ->
+    it 'retrieves first value', () ->
+      l = new hl.Humane_List( [3,4,5] )
+      assert.equal l.left(), 3
 
-  it 'retrieves last value', () ->
-    l = new hl.Humane_List( [6, 7, 8] )
-    assert.equal l.right(), 8
+  describe '.right()', () ->
+    it 'retrieves last value', () ->
+      l = new hl.Humane_List( [6, 7, 8] )
+      assert.equal l.right(), 8
 
-  it 'returns false if not .has_key', () ->
-    l = new hl.Humane_List uno: 1, two: 2, three: 3, four: 4
-    assert.equal l.has_key('one'), false
+  describe '.has_key(k)', () ->
+    it 'returns false if key not found', () ->
+      l = new hl.Humane_List uno: 1, two: 2, three: 3, four: 4
+      assert.equal l.has_key('one'), false
 
-  it 'returns true if .has_key', () ->
-    l = new hl.Humane_List one: 1, two: 2, three: 3, four: 4
-    assert.equal l.has_key('one'), true
+    it 'returns true if key found', () ->
+      l = new hl.Humane_List one: 1, two: 2, three: 3, four: 4
+      assert.equal l.has_key('one'), true
 
-  it '.keys() returns keys in original order', () ->
-    l = new hl.Humane_List( one: 1, two: 2, three: 3)
-    assert.deepEqual l.keys(), [ ['one'], ['two'], ['three'] ]
+  describe '.keys()', () ->
+    it '.keys() returns keys in original order', () ->
+      l = new hl.Humane_List( one: 1, two: 2, three: 3)
+      assert.deepEqual l.keys(), [ ['one'], ['two'], ['three'] ]
 
-  it '.at_key() returns undefined if key not found.', () ->
-    l = new hl.Humane_List( one: 1, two: 2, three: 3)
-    assert_undef l.at_key('uno')
+  describe '.at_key(l)', () ->
+    it '.at_key() returns undefined if key not found.', () ->
+      l = new hl.Humane_List( one: 1, two: 2, three: 3)
+      assert_undef l.at_key('uno')
 
 # ============================================================================
 describe 'Inserting', () ->
