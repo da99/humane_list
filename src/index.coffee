@@ -41,7 +41,7 @@ class Humane_List
       []
 
   pop: (pos) ->
-    arr = if pos.toString() is 'first'
+    arr = if pos.toString() is 'left'
       @core.shift()
     else
       @core.pop()
@@ -51,7 +51,7 @@ class Humane_List
 
   push: (pos, v) ->
     e = ( new @Element v )
-    if pos.toString() is 'first'
+    if pos.toString() is 'left'
       @core.unshift e
     else
       @core.push e
@@ -87,7 +87,7 @@ class Humane_List
     else
       (new @Element( key,  val)) for key, val of o
       
-    @core = if pos.toString() is "first"
+    @core = if pos.toString() is "left"
       new_core.concat @core
     else
       @core.concat new_core

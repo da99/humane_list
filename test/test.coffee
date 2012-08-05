@@ -51,15 +51,15 @@ describe 'Inserting', () ->
 
   it 'can insert to the top', () ->
     l = new hl.Humane_List()
-    l.push 'first', "def"
-    l.push 'first', "abc"
+    l.push 'left', "def"
+    l.push 'left', "abc"
     assert.equal l.left(), "abc"
 
   it 'can insert at end', () ->
     l = new hl.Humane_List()
-    l.push 'last', "second"
-    l.push 'last', "first"
-    l.push 'last', "third"
+    l.push 'right', "second"
+    l.push 'right', "first"
+    l.push 'right', "third"
     assert.equal l.right(), "third"
 
 # ============================================================================
@@ -127,17 +127,17 @@ describe 'Merging', () ->
 
   it 'can merge an array before first element', () ->
     l = new hl.Humane_List([1,2,3])
-    l.merge 'first', [-2, -1, 0]
+    l.merge 'left', [-2, -1, 0]
     assert.deepEqual l.values(), [-2, -1, 0, 1, 2, 3]
 
   it 'can merge an object after last element', () ->
     l = new hl.Humane_List( one: 1, two: 2 )
-    l.merge 'last', three: 3, four: 4
+    l.merge 'right', three: 3, four: 4
     assert.deepEqual l.values(), [1, 2, 3, 4]
 
   it 'keeps order of keys when merging objects', () ->
     l = new hl.Humane_List( uno: 1, dos: 2 )
-    l.merge 'first', neg_one: -1, zero: 0
+    l.merge 'left', neg_one: -1, zero: 0
     assert.deepEqual l.keys(), [ ["neg_one"], ["zero"], ["uno"], ["dos"] ]
     
 # ============================================================================
@@ -145,21 +145,21 @@ describe 'Popping', () ->
 
   it 'can pop from the top', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    l.pop('first')
+    l.pop('left')
     assert.deepEqual l.values(), ['j', 'k', 'l']
     
   it 'returns value from the top', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    assert.equal l.pop('first'), 'h'
+    assert.equal l.pop('left'), 'h'
 
   it 'can pop from the end', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    l.pop('last')
+    l.pop('right')
     assert.deepEqual l.values(), ['h', 'j', 'k']
     
   it 'returns value from the end', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    assert.equal l.pop('last'), 'l'
+    assert.equal l.pop('right'), 'l'
 
 
 # ============================================================================
