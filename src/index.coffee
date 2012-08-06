@@ -5,34 +5,41 @@ class Humane_List
 
     constructor: () ->
 
+      @d = {}
+
       switch arguments.length
+
         when 1
-          @keys = []
+          @d.keys = []
           @val = arguments[0]
         when 2
-          @keys = arguments[0]
+          @d.keys = arguments[0]
           @val  = arguments[1]
         when 3
           @pos  = arguments[0]
-          @keys = arguments[1]
+          @d.keys = arguments[1]
           @val  = arguments[2]
           
         else
           throw new Error("Unknown quantity of arguments: #{arguments}")
         
-      @keys = if @keys.shift
-        @keys
+      @d.keys = if @d.keys.shift
+        @d.keys
       else
-        [@keys]
+        [@d.keys]
+
+    keys: () ->
+      @d.keys
 
     to_array: () ->
-      [ @keys, @val ]
+      [ @d.keys, @val ]
 
     remove_alias: (alias) ->
-      @keys = (k for k in @keys when k != alias)
+      @d.keys = (k for k in @d.keys when k != alias)
       
   constructor: ( vals ) ->
     @data = {}
+    @d = @data
     @data.core = []
     
     if vals && vals.shift
@@ -42,6 +49,9 @@ class Humane_List
     else if vals
       @push('end', k, v) for k, v of vals
         
+  keys: () ->
+    @d.keys
+
   pop: (pos) ->
     arr = if pos.toString() is 'front'
       @data.core.shift()
@@ -107,7 +117,7 @@ class Humane_List
     row and row.val
 
   at_key: (k) ->
-    v = ele.val for ele in @data.core when k in ele.keys
+    v = ele.val for ele in @data.core when k in ele.keys()
     v
     
   at_position: (n) ->
@@ -115,14 +125,14 @@ class Humane_List
     @data.core[comp_pos] && @data.core[comp_pos].val
 
   has_key: (k) ->
-    found = (v.keys for v in @data.core when k in v.keys)
+    found = (v.keys() for v in @data.core when k in v.keys())
     found.length > 0
 
   positions: () ->
     (v.pos for v in @data.core)
 
   keys: () ->
-    (ele.keys for ele in @data.core)
+    (ele.keys() for ele in @data.core)
     
   values: () ->
     (v.val for v in @data.core)
@@ -145,7 +155,7 @@ class Humane_List
   get_computer_position: (key_or_human_pos) ->
     key_or_pos = @to_key_or_computer_position(key_or_human_pos)
     return key_or_pos unless key_or_pos
-    pos = k for v, k in @data.core when (k is key_or_pos ) or ( key_or_pos in v.keys )
+    pos = k for v, k in @data.core when (k is key_or_pos ) or ( key_or_pos in v.keys() )
     pos
 
   get_computer_position_or_throw: (key_or_human_pos) ->
@@ -156,7 +166,7 @@ class Humane_List
     
   alias: (key_or_pos, nickname) ->
     pos = @get_computer_position_or_throw(key_or_pos)
-    keys = @data.core[pos].keys
+    keys = @data.core[pos].keys()
     return nickname if nickname in keys
     keys.push nickname
     
