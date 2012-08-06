@@ -11,14 +11,14 @@ class Humane_List
 
         when 1
           @d.keys = []
-          @val = arguments[0]
+          @d.val = arguments[0]
         when 2
           @d.keys = arguments[0]
-          @val  = arguments[1]
+          @d.val  = arguments[1]
         when 3
-          @pos  = arguments[0]
+          @d.pos  = arguments[0]
           @d.keys = arguments[1]
-          @val  = arguments[2]
+          @d.val  = arguments[2]
           
         else
           throw new Error("Unknown quantity of arguments: #{arguments}")
@@ -31,16 +31,24 @@ class Humane_List
     keys: () ->
       @d.keys
 
+    value: () ->
+      @d.val
+
+    position: () ->
+      @d.pos
+
+    update_position: (n) ->
+      @d.pos = n
+
     to_array: () ->
-      [ @d.keys, @val ]
+      [ @d.keys, @d.val ]
 
     remove_alias: (alias) ->
       @d.keys = (k for k in @d.keys when k != alias)
       
   constructor: ( vals ) ->
-    @data = {}
-    @d = @data
-    @data.core = []
+    @d = {}
+    @d.core = []
     
     if vals && vals.shift
       @push('end', v) for v in vals
@@ -53,13 +61,13 @@ class Humane_List
     @d.keys
 
   pop: (pos) ->
-    arr = if pos.toString() is 'front'
-      @data.core.shift()
+    ele = if pos.toString() is 'front'
+      @d.core.shift()
     else
-      @data.core.pop()
+      @d.core.pop()
       
-    return arr unless arr
-    arr.val
+    return ele unless ele
+    ele.value()
 
   push: () ->
     args = arguments
@@ -71,7 +79,7 @@ class Humane_List
         1
       else
         last = @positions().pop()
-        (last && (last + 1)) || @data.core.length + 1
+        (last && (last + 1)) || @d.core.length + 1
 
     # Create new element.
     switch args.length
@@ -92,50 +100,50 @@ class Humane_List
         
       
     # Insert new element at front.
-    @data.core.unshift e
+    @d.core.unshift e
     
     # Sort based on human position.
-    @data.core = @data.core.sort (a,b) ->
-      a.pos > b.pos
+    @d.core = @d.core.sort (a,b) ->
+      a.position() > b.position()
       
     # Update positions.
-    if @data.core.length > 1
-      for last_v, i in @data.core
-        v = @data.core[i+1]
+    if @d.core.length > 1
+      for last_v, i in @d.core
+        v = @d.core[i+1]
         if v
-          if last_v.pos >= v.pos
-            v.pos += 1
+          if last_v.position() >= v.position()
+            v.update_position( v.position() + 1 )
       
 
-    e.pos
+    e.position()
 
   front: () ->
-    @data.core[0] and @data.core[0].val
+    @d.core[0] and @d.core[0].value()
 
   end: () ->
-    row = @data.core[@data.core.length - 1]
-    row and row.val
+    row = @d.core[@d.core.length - 1]
+    row and row.value()
 
   at_key: (k) ->
-    v = ele.val for ele in @data.core when k in ele.keys()
+    v = ele.value() for ele in @d.core when k in ele.keys()
     v
     
   at_position: (n) ->
     comp_pos = @to_key_or_computer_position(n)
-    @data.core[comp_pos] && @data.core[comp_pos].val
+    @d.core[comp_pos] && @d.core[comp_pos].value()
 
   has_key: (k) ->
-    found = (v.keys() for v in @data.core when k in v.keys())
+    found = (v.keys() for v in @d.core when k in v.keys())
     found.length > 0
 
   positions: () ->
-    (v.pos for v in @data.core)
+    (v.position() for v in @d.core)
 
   keys: () ->
-    (ele.keys() for ele in @data.core)
+    (ele.keys() for ele in @d.core)
     
   values: () ->
-    (v.val for v in @data.core)
+    (v.value() for v in @d.core)
 
   concat: (pos, o) ->
     if o.shift
@@ -155,7 +163,7 @@ class Humane_List
   get_computer_position: (key_or_human_pos) ->
     key_or_pos = @to_key_or_computer_position(key_or_human_pos)
     return key_or_pos unless key_or_pos
-    pos = k for v, k in @data.core when (k is key_or_pos ) or ( key_or_pos in v.keys() )
+    pos = k for v, k in @d.core when (k is key_or_pos ) or ( key_or_pos in v.keys() )
     pos
 
   get_computer_position_or_throw: (key_or_human_pos) ->
@@ -166,22 +174,22 @@ class Humane_List
     
   alias: (key_or_pos, nickname) ->
     pos = @get_computer_position_or_throw(key_or_pos)
-    keys = @data.core[pos].keys()
+    keys = @d.core[pos].keys()
     return nickname if nickname in keys
     keys.push nickname
     
   remove_alias: (nickname) ->
-    for ele in @data.core
+    for ele in @d.core
       ele.remove_alias nickname
     nickname
 
   delete_at: (target_k) ->
     pos = @get_computer_position(target_k)
-    row = @data.core[pos]
+    row = @d.core[pos]
     return row unless row
     
     old = @at_position(pos)
-    @data.core = (v for v,k in @data.core when k != pos)
+    @d.core = (v for v,k in @d.core when k != pos)
     old
 
 
