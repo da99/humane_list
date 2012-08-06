@@ -16,11 +16,24 @@ way non-programmers (ie humans) expect lists to act (ie usability).
   * Why?! Because non-programmers might confuse keys with indexes.  Think of a 
     book with an index.
 
+Installation and Usage
+=====
+
+On your shell:
+
+    npm install humane_list
+
+In your script:
+
+    var hl = require('humane_list');
+    var empty   = new hl.Humane_List();
+    var w_array = new hl.Humane_List( [1,2,3] );
+    var w_obj   = new hl.Humane_List( { one: 1, two: 2, three: 3 } );
+
+
 Usage: Inserting
 =====
 
-    var ha = require('humane_list');
-    var stuff = new ha.Humane_List();
     stuff.push( "end", "red" );
     stuff.push( "end", "blue" );
     stuff.end(); 
@@ -68,9 +81,6 @@ No shift or unshift.
     // => "red"
     
 
-Installation
-============
 
-    npm install humane_list
 
 

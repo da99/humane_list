@@ -1,6 +1,6 @@
 {
   "name": "humane_list",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A combination of array and kv structure.",
   "main": "lib/index.js",
   "scripts": {
