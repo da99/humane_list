@@ -50,12 +50,11 @@ class Humane_List
     @d = {}
     @d.core = []
 
-    if vals && vals.shift
-      @push('end', v) for v in vals
-        
-        
-    else if vals
-      @push('end', k, v) for k, v of vals
+    if vals 
+      if vals.shift
+        @push('end', v) for v in vals
+      else
+        @push('end', k, v) for k, v of vals
         
   # =============== Navigation
   position: () ->
@@ -153,7 +152,7 @@ class Humane_List
     
     # Sort based on human position.
     @d.core = @d.core.sort (a,b) ->
-      a.position() > b.position()
+      a.position() - b.position()
       
     # Update positions.
     if @d.core.length > 1

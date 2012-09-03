@@ -1,5 +1,6 @@
 assert = require "assert"
 hl = require "humane_list"
+_  = require "underscore"
 
 
 must_equal = (a, e) ->
@@ -213,36 +214,35 @@ describe 'Inspecting', () ->
 describe 'Pushing', () ->
 
   it 'can insert to the top', () ->
-    l = new hl.Humane_List()
+    l = new hl()
     l.push 'front', "def"
     l.push 'front', "abc"
     assert.equal l.front(), "abc"
 
   it 'can insert at end', () ->
-    l = new hl.Humane_List()
+    l = new hl()
     l.push 'end', "second"
     l.push 'end', "first"
     l.push 'end', "third"
     assert.equal l.end(), "third"
 
   it 'can insert at a specified position', () ->
-    l = new hl.Humane_List [1, 3, 4]
+    l = new hl [1, 3, 4]
     l.push 2, "dos"
     assert.deepEqual l.values(), [1, "dos", 3, 4]
 
   it 'sets a default position of 1 for first element w/o defined position', () ->
-    l = new hl.Humane_List
+    l = new hl
     l.push 'front', "one"
     assert.deepEqual l.positions(), [1]
 
   it 'sets a default position of .length+1 for pushing to end', () ->
-    l = new hl.Humane_List [1,2,3]
+    l = new hl [1,2,3]
     l.push 'end', "four"
     assert.deepEqual l.positions(), [1,2,3,4]
 
-
   it 'adds one to all succeeding positions until positions are unique', () ->
-    l = new hl.Humane_List [1, 2, 3]
+    l = new hl [1, 2, 3]
     l.push 2.1, "2.1"
     l.push 2, "dos"
     l.push 5, "five"
@@ -250,13 +250,18 @@ describe 'Pushing', () ->
     assert.deepEqual l.positions(), [ 1,  2, 3, 3.1, 4, 5]
 
   it 'can insert both a key and value', () ->
-    l = new hl.Humane_List()
+    l = new hl()
     l.push 'front', "three", 3
     l.push 'front', "two", 2
     l.push 'front', "one", 1
 
     assert.deepEqual l.values(), [1, 2, 3]
     assert.deepEqual l.keys(),   [ ['one'], ['two'], ['three'] ]
+
+  it 'sorts elements using numerical sorting of position: 1..20', () ->
+    arr = _.range(1,21)
+    l = new hl(arr)
+    assert.deepEqual l.values(), arr
 
 # ============================================================================
 describe 'Popping', () ->
