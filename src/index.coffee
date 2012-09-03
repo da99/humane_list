@@ -49,7 +49,7 @@ class Humane_List
   constructor: ( vals ) ->
     @d = {}
     @d.core = []
-    
+
     if vals && vals.shift
       @push('end', v) for v in vals
         
@@ -57,6 +57,55 @@ class Humane_List
     else if vals
       @push('end', k, v) for k, v of vals
         
+  # =============== Navigation
+  position: () ->
+    @d.pos
+
+  forward: () ->
+    @to( @position() + 1 )
+    
+  backward: () ->
+    @to( @position() - 1 )
+    
+  to: (n) ->
+    if n < 1 and @length() > 0
+      throw new Error("Position can't be, #{n}, because starting position is: 1.")
+    if @length() is 0
+      throw new Error("Position can't be, #{n}, because length is: #{@length()}.")
+    if n > @length()
+      throw new Error("Position can't be, #{n}, because length is: #{@length()}.")
+    
+    @d.pos = n
+
+  to_front: () ->
+    if @length() > 0
+      @to 1
+    else
+      @to 0
+
+  to_end: () ->
+    @to @length()
+
+  is_at_front: () ->
+    @position() is 1
+
+  is_at_end: () ->
+    @position() is @length()
+
+  value: () ->
+    @at_position( @position() )
+
+  next: () ->
+    @at_position( @position() + 1 )
+
+  previous: () ->
+    @at_position( @position() - 1 )
+
+  # ================ Create, Read, Update, Delete
+  
+  length: () ->
+    @d.core.length
+    
   keys: () ->
     @d.keys
 
@@ -114,6 +163,9 @@ class Humane_List
           if last_v.position() >= v.position()
             v.update_position( v.position() + 1 )
       
+
+    if @length() > 0 and (@position() is 0 or @position() is undefined)
+      @to(1)
 
     e.position()
 
@@ -193,7 +245,8 @@ class Humane_List
     old
 
 
-exports.Humane_List = Humane_List
+module.exports = Humane_List
+module.exports.Humane_List = Humane_List
 
 
 

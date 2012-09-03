@@ -26,9 +26,9 @@ On your shell:
 In your script:
 
     var hl = require('humane_list');
-    var empty   = new hl.Humane_List();
-    var w_array = new hl.Humane_List( [1,2,3] );
-    var w_obj   = new hl.Humane_List( { one: 1, two: 2, three: 3 } );
+    var empty   = new hl();
+    var w_array = new hl( [1,2,3] );
+    var w_obj   = new hl( { one: 1, two: 2, three: 3 } );
 
 
 Usage: Inserting

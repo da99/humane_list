@@ -20,16 +20,174 @@ describe 'Initialization', () ->
     assert.deepEqual l.values(), [1,2,3,4]
 
 # ============================================================================
+describe 'Navigation', () ->
+
+  describe '.position()', () ->
+
+    it 'has a default of undefined if no array passed to it', () ->
+      l = new hl.Humane_List
+      assert.equal l.position(), undefined
+
+    it 'has a default of 1', () ->
+      l = new hl.Humane_List [1,2,3]
+      assert.equal l.position(), 1
+  
+  describe '.forward()', () ->
+
+    it 'moves position forward by one', () ->
+      l = new hl.Humane_List [1,2,3]
+      l.forward()
+      assert.equal l.position(), 2
+
+    it 'raises an error if length is 0', () ->
+      l = new hl.Humane_List
+      try 
+        l.forward()
+      catch e
+        err = e
+      assert.equal err.message, "Position can't be, NaN, because length is: 0."
+  
+    it 'raises an error if past length', () ->
+      l = new hl.Humane_List [1,2,3]
+      l.forward()
+      l.forward()
+      try
+        l.forward()
+      catch e
+        err = e 
+        
+      assert.equal err.message, "Position can't be, 4, because length is: 3."
+      
+  describe '.backward()', () ->
+
+    it 'moves position backward by one', () ->
+      l = new hl.Humane_List [1,2,3]
+      l.forward()
+      l.forward()
+      l.backward()
+      assert.equal l.position(), 2
+
+    it 'raises an error if length is 0', () ->
+      l = new hl.Humane_List
+      try 
+        l.backward()
+      catch e
+        err = e
+      assert.equal err.message, "Position can't be, NaN, because length is: 0."
+
+    it 'raises an error if position is 1', () ->
+      l = new hl.Humane_List [1,2,3]
+      try 
+        l.backward()
+      catch e
+        err = e
+      assert.equal err.message, "Position can't be, 0, because starting position is: 1."
+
+
+  describe '.to(N)', () ->
+    
+    it 'moves position to N', () ->
+      l = new hl.Humane_List [0,2,4]
+      l.to(3)
+      assert.equal l.position(), 3
+  
+  describe '.to_front()', () ->
+    
+    it 'moves position to 0', () ->
+      l = new hl.Humane_List [0,2,4]
+      l.to_front()
+      assert.equal l.position(), 1
+
+    it "raises an error if length is 0", () ->
+      l = new hl.Humane_List
+      try
+        l.to_front()
+      catch e
+        err = e
+      assert.equal err.message, "Position can't be, 0, because length is: 0."
+  
+  describe '.to_end()', () ->
+    
+    it 'moves position to length-1', () ->
+      l = new hl.Humane_List [0,2,4]
+      l.to_end()
+      assert.equal l.position(), 3
+
+    it "raises an error if length is 0", () ->
+      l = new hl.Humane_List
+      try
+        l.to_end()
+      catch e
+        err = e
+      assert.equal err.message, "Position can't be, 0, because length is: 0."
+    
+  describe '.is_at_front()', () ->
+
+    it 'returns true if at first position', () ->
+      l = new hl.Humane_List [0,2,4,6]
+      assert.equal l.is_at_front(), true
+
+    it 'returns false if not first position', () ->
+      l = new hl.Humane_List [0,2,4,6]
+      l.to(2)
+      assert.equal l.is_at_front(), false
+
+  describe '.is_at_end()', () ->
+
+    it 'returns true if at last position', () ->
+      l = new hl.Humane_List [0,2,4,6]
+      l.to_end()
+      assert.equal l.is_at_end(), true
+
+    it 'returns false if not at last position', () ->
+      l = new hl.Humane_List [0,2,4,6]
+      assert.equal l.is_at_end(), false
+
+  describe '.value()', () ->
+
+    it 'returns value at current position', () ->
+      l = new hl.Humane_List [0,2,4,6,8]
+      l.to(4)
+      assert.equal l.value(), 6
+
+  describe '.next()', () ->
+
+    it 'returns the next value', () ->
+      l = new hl.Humane_List [0,2,4,6,8]
+      l.to(2)
+      assert.equal l.next(), 4
+
+    it 'does not alter position', () ->
+      l = new hl.Humane_List [0,2,4,6,8]
+      l.to(2)
+      l.next()
+      assert.equal l.position(), 2
+
+  describe '.previous()', () ->
+
+    it 'returns the previous value', () ->
+      l = new hl [0,2,4,6,8]
+      l.to(3)
+      assert.equal l.previous(), 2
+
+    it 'does not alter position', () ->
+      l = new hl [0,2,4,6,8]
+      l.to(3)
+      l.previous()
+      assert.equal l.position(), 3
+
+    
+# ============================================================================
 describe 'Inspecting', () ->
   
   describe '.front()', () ->
     it 'retrieves first value', () ->
-      l = new hl.Humane_List( [3,4,5] )
+      l = new hl( [3,4,5] )
       assert.equal l.front(), 3
 
   describe '.end()', () ->
     it 'retrieves last value', () ->
-      l = new hl.Humane_List( [6, 7, 8] )
+      l = new hl( [6, 7, 8] )
       assert.equal l.end(), 8
 
   describe '.has_key(k)', () ->
