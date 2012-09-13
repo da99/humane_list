@@ -2,7 +2,7 @@
   "name": "humane_list",
   "version": "0.3.1",
   "description": "A combination of array and kv structure.",
-  "main": "lib/index.js",
+  "main": "lib/Humane_List.js",
   "scripts": {
     "test": "mocha  --watch --compilers coffee:coffee-script"
   },

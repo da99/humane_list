@@ -1,3 +1,4 @@
+Position = require 'humane_list/lib/Position'
 
 class Humane_List
 
@@ -246,6 +247,7 @@ class Humane_List
 
 module.exports = Humane_List
 module.exports.Humane_List = Humane_List
+module.exports.Position = Position
 
 
 
