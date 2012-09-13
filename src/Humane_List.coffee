@@ -67,6 +67,9 @@ class Humane_List
   upward: () ->
     @to( @position() - 1 )
     
+  forward: this.prototype.downward
+  backward: this.prototype.upward
+  
   to: (n) ->
     if n < 1 and @length() > 0
       throw new Error("Position can't be, #{n}, because starting position is: 1.")

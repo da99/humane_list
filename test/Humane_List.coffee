@@ -59,6 +59,19 @@ describe 'Navigation', () ->
         
       assert.equal err.message, "Position can't be, 4, because length is: 3."
       
+  describe '.forward()', () ->
+
+    it 'is the same as .downward()', ()->
+      l = new hl.Humane_List [1,2,3]
+      assert.equal l.downward, l.forward
+
+  describe '.backward()', ()->
+
+    it 'is the same as .upward()', ()->
+      l = new hl.Humane_List [1,2,3]
+      assert.equal l.upward, l.backward
+
+
   describe '.upward()', () ->
 
     it 'moves position upward by one', () ->
