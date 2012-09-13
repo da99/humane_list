@@ -33,45 +33,45 @@ describe 'Navigation', () ->
       l = new hl.Humane_List [1,2,3]
       assert.equal l.position(), 1
   
-  describe '.forward()', () ->
+  describe '.downward()', () ->
 
-    it 'moves position forward by one', () ->
+    it 'moves position downward by one', () ->
       l = new hl.Humane_List [1,2,3]
-      l.forward()
+      l.downward()
       assert.equal l.position(), 2
 
     it 'raises an error if length is 0', () ->
       l = new hl.Humane_List
       try 
-        l.forward()
+        l.downward()
       catch e
         err = e
       assert.equal err.message, "Position can't be, NaN, because length is: 0."
   
     it 'raises an error if past length', () ->
       l = new hl.Humane_List [1,2,3]
-      l.forward()
-      l.forward()
+      l.downward()
+      l.downward()
       try
-        l.forward()
+        l.downward()
       catch e
         err = e 
         
       assert.equal err.message, "Position can't be, 4, because length is: 3."
       
-  describe '.backward()', () ->
+  describe '.upward()', () ->
 
-    it 'moves position backward by one', () ->
+    it 'moves position upward by one', () ->
       l = new hl.Humane_List [1,2,3]
-      l.forward()
-      l.forward()
-      l.backward()
+      l.downward()
+      l.downward()
+      l.upward()
       assert.equal l.position(), 2
 
     it 'raises an error if length is 0', () ->
       l = new hl.Humane_List
       try 
-        l.backward()
+        l.upward()
       catch e
         err = e
       assert.equal err.message, "Position can't be, NaN, because length is: 0."
@@ -79,7 +79,7 @@ describe 'Navigation', () ->
     it 'raises an error if position is 1', () ->
       l = new hl.Humane_List [1,2,3]
       try 
-        l.backward()
+        l.upward()
       catch e
         err = e
       assert.equal err.message, "Position can't be, 0, because starting position is: 1."

@@ -61,10 +61,10 @@ class Humane_List
   position: () ->
     @d.pos
 
-  forward: () ->
+  downward: () ->
     @to( @position() + 1 )
     
-  backward: () ->
+  upward: () ->
     @to( @position() - 1 )
     
   to: (n) ->
