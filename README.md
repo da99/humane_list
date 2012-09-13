@@ -11,8 +11,6 @@ shopping lists: top to bottom.
 * `.pop( 'top' )` and `.push('top', vals)` to attach before first element. 
 * `.pop( 'bottom'  )`  and `.push('bottom',  vals)` to pop/insert after last element.
 * `.top()` and `.bottom()` instead of `.first()` and `.last()`
-  * Why design it this way? Because index positions can be -1, -2.1, etc. 
-    Non-programmers would assume `.first()` returned value at index 1, instead of -1.
 * Instead of index, you have positions. 
   * Why?! Because non-programmers might confuse keys with indexes.  Think of a 
     book with an index.

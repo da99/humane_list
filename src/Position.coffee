@@ -1,6 +1,7 @@
 
 rw = require 'rw_ize'
 forward = require 'forward_these_functions'
+_  = require 'underscore'
 
 class Position
 
@@ -31,16 +32,27 @@ class Position
   # ===============================
   
   downward: () ->
-    @to( @position() + 1 )
+    if @position() is @list().last_position()
+      throw new Error("Position already at end: #{@position()}.")
+    @to @list().position_after( @position() )
     
   upward: () ->
-    @to( @position() - 1 )
+    prev = @list().position_before( @position() )
+    if not _.isNumber(prev)
+      throw new Error("No valid position before: #{@position()}.")
+    @to prev
     
   next: () ->
-    @list().at_position( @position() + 1 )
+    next = @list().position_after( @position() ) 
+    if not _.isNumber(next)
+      throw new Error "No valid position after: #{@position()}."
+    @list().at_position next
 
   previous: () ->
-    @list().at_position( @position() - 1 )
+    prev = @list().position_before( @position() )
+    if not _.isNumber(prev)
+      throw new Error "No valid position before: #{@position()}."
+    @list().at_position prev
     
   # ===============================
   #          Leaping

@@ -18,9 +18,19 @@ class Humane_List
   position: () ->
     new Position(this)
 
+  position_after: (n) ->
+    _.find @positions(), (p) ->
+      p > n
+
+  position_before: (n) ->
+    _.find @positions().reverse(), (p) ->
+      p < n
+
+  first_position: (n) ->
+
   first_position: () ->
     return 0 if @is_empty()
-    1
+    _.first( @d.core ).position()
 
   last_position: () ->
     return 0 if @is_empty()
