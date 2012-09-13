@@ -11,7 +11,9 @@
     "url": "https://github.com/da99/humane_list"
   },
   "dependencies": {
-    "underscore": "*"
+    "underscore": "*",
+    "rw_ize": "*", 
+    "forward_these_functions": "*"
   },
   "author": "da99",
   "license": "BSD"

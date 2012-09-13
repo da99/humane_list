@@ -3,7 +3,8 @@ humane\_list
 ============
 
 Combining arrays with kv structures.  It is meant to act the 
-way non-programmers (ie humans) expect lists to act (ie usability).
+way non-programmers (ie humans) expect lists to act (ie usability). Think of
+shopping lists: top to bottom.
 
 * Default index is 1, not 0.
 * This is no `shift` or `unshift`.

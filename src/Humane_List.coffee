@@ -1,52 +1,9 @@
 Position = require 'humane_list/lib/Position'
+Element  = require "humane_list/lib/Element"
+_        = require "underscore"
 
 class Humane_List
 
-  Element: class Element
-
-    constructor: () ->
-
-      @d = {}
-
-      switch arguments.length
-
-        when 1
-          @d.keys = []
-          @d.val = arguments[0]
-        when 2
-          @d.keys = arguments[0]
-          @d.val  = arguments[1]
-        when 3
-          @d.pos  = arguments[0]
-          @d.keys = arguments[1]
-          @d.val  = arguments[2]
-          
-        else
-          throw new Error("Unknown quantity of arguments: #{arguments}")
-        
-      @d.keys = if @d.keys.shift
-        @d.keys
-      else
-        [@d.keys]
-
-    keys: () ->
-      @d.keys
-
-    value: () ->
-      @d.val
-
-    position: () ->
-      @d.pos
-
-    update_position: (n) ->
-      @d.pos = n
-
-    to_array: () ->
-      [ @d.keys, @d.val ]
-
-    remove_alias: (alias) ->
-      @d.keys = (k for k in @d.keys when k != alias)
-      
   constructor: ( vals ) ->
     @d = {}
     @d.core = []
@@ -59,50 +16,18 @@ class Humane_List
         
   # =============== Navigation
   position: () ->
-    @d.pos
+    new Position(this)
 
-  downward: () ->
-    @to( @position() + 1 )
-    
-  upward: () ->
-    @to( @position() - 1 )
-    
-  forward: this.prototype.downward
-  backward: this.prototype.upward
-  
-  to: (n) ->
-    if n < 1 and @length() > 0
-      throw new Error("Position can't be, #{n}, because starting position is: 1.")
-    if @length() is 0
-      throw new Error("Position can't be, #{n}, because length is: #{@length()}.")
-    if n > @length()
-      throw new Error("Position can't be, #{n}, because length is: #{@length()}.")
-    
-    @d.pos = n
+  first_position: () ->
+    return 0 if @is_empty()
+    1
 
-  to_top: () ->
-    if @length() > 0
-      @to 1
-    else
-      @to 0
+  last_position: () ->
+    return 0 if @is_empty()
+    _.last( @d.core ).position()
 
-  to_bottom: () ->
-    @to @length()
-
-  is_at_top: () ->
-    @position() is 1
-
-  is_at_bottom: () ->
-    @position() is @length()
-
-  value: () ->
-    @at_position( @position() )
-
-  next: () ->
-    @at_position( @position() + 1 )
-
-  previous: () ->
-    @at_position( @position() - 1 )
+  is_empty: () -> 
+    @d.core.length is 0
 
   # ================ Create, Read, Update, Delete
   
@@ -137,15 +62,15 @@ class Humane_List
     switch args.length
       when 2
         e = if num_pos
-          ( new @Element num_pos, [], args[1] )
+          ( new Element num_pos, [], args[1] )
         else
-          ( new @Element args[1] )
+          ( new Element args[1] )
           
       when 3
         e = if num_pos
-          ( new @Element num_pos, args[1], args[2] )
+          ( new Element num_pos, args[1], args[2] )
         else
-          ( new @Element args[1], args[2] )
+          ( new Element args[1], args[2] )
           
       else
         throw( new Error("Invalid arguments: #{arguments}") )
@@ -167,11 +92,10 @@ class Humane_List
             v.update_position( v.position() + 1 )
       
 
-    if @length() > 0 and (@position() is 0 or @position() is undefined)
-      @to(1)
 
-    e.position()
-
+  # =============================================
+  #               Inspecting keys
+  # =============================================
   top: () ->
     @d.core[0] and @d.core[0].value()
 

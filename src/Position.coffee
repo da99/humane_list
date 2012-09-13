@@ -11,33 +11,56 @@ class Position
 
   constructor: ( list ) ->
     @rw_data 'list', list
-    if @list().is_empty()
-      @rw_data 'position', 0
-    else
-      @rw_data 'position', 1
+    @rw_data 'position', @list().first_position()
 
-  is_a_position: () ->
-    true
-
+  value: () ->
+    @list().at_position( @position() )
+    
+  # ===============================
+  #          Questions 
+  # ===============================
+    
   is_at_top: () ->
-    if @list().is_empty()
-      @position() is 0
-    else
-      @position() is 1
+    @position() is @list().first_position()
 
   is_at_bottom: () ->
-    if @list().is_empty()
-      @position() is 0
-    else 
-      @position() is @list().last_position()
+    @position() is @list().last_position()
+    
+  # ===============================
+  #          Increments of 1
+  # ===============================
+  
+  downward: () ->
+    @to( @position() + 1 )
+    
+  upward: () ->
+    @to( @position() - 1 )
+    
+  next: () ->
+    @list().at_position( @position() + 1 )
 
-  downward: ( list ) ->
-    return @value() if @position() is @list().last_position()
-    @rw_data 'position', @list().position_after( @position() )
-    @value()
-
-  forward: @prototype.downwward
-  backward: @prototype.upward
+  previous: () ->
+    @list().at_position( @position() - 1 )
+    
+  # ===============================
+  #          Leaping
+  # ===============================
+  
+  to_top: () ->
+    @to @list().first_position()
+      
+  to_bottom: () ->
+    @to @list().last_position()
+  
+  to: (n) ->
+    if n < @list().first_position()
+      throw new Error("Position can't be, #{n}, because starting position is: #{@list().first_position()}.")
+    if @list().is_empty() and n isnt 0
+      throw new Error("Position can't be, #{n}, because length is: #{@list().length()}.")
+    if n > @list().last_position()
+      throw new Error("Position can't be, #{n}, because length is: #{@list().length()}.")
+    
+    @rw_data 'position', n
 
 
 module.exports = Position
