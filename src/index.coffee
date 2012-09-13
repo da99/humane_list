@@ -52,9 +52,9 @@ class Humane_List
 
     if vals 
       if vals.shift
-        @push('end', v) for v in vals
+        @push('bottom', v) for v in vals
       else
-        @push('end', k, v) for k, v of vals
+        @push('bottom', k, v) for k, v of vals
         
   # =============== Navigation
   position: () ->
@@ -76,19 +76,19 @@ class Humane_List
     
     @d.pos = n
 
-  to_front: () ->
+  to_top: () ->
     if @length() > 0
       @to 1
     else
       @to 0
 
-  to_end: () ->
+  to_bottom: () ->
     @to @length()
 
-  is_at_front: () ->
+  is_at_top: () ->
     @position() is 1
 
-  is_at_end: () ->
+  is_at_bottom: () ->
     @position() is @length()
 
   value: () ->
@@ -109,7 +109,7 @@ class Humane_List
     @d.keys
 
   pop: (pos) ->
-    ele = if pos.toString() is 'front'
+    ele = if pos.toString() is 'top'
       @d.core.shift()
     else
       @d.core.pop()
@@ -123,7 +123,7 @@ class Humane_List
     num_pos = if typeof(pos) is "number"
       pos
     else
-      if pos is 'front'
+      if pos is 'top'
         1
       else
         last = @positions().pop()
@@ -147,7 +147,7 @@ class Humane_List
         throw( new Error("Invalid arguments: #{arguments}") )
         
       
-    # Insert new element at front.
+    # Insert new element at top.
     @d.core.unshift e
     
     # Sort based on human position.
@@ -168,10 +168,10 @@ class Humane_List
 
     e.position()
 
-  front: () ->
+  top: () ->
     @d.core[0] and @d.core[0].value()
 
-  end: () ->
+  bottom: () ->
     row = @d.core[@d.core.length - 1]
     row and row.value()
 
@@ -199,11 +199,11 @@ class Humane_List
   concat: (pos, o) ->
     if o.shift
       positions = (i for v, i in o)
-      positions = positions.reverse() if pos is 'front'
+      positions = positions.reverse() if pos is 'top'
       @push(pos, o[i]) for i in positions
     else
       keys = (key for key, val of o)
-      keys = keys.reverse() if pos is 'front'
+      keys = keys.reverse() if pos is 'top'
       @push(pos, key, o[key]) for key in keys
 
   to_key_or_computer_position: (key_or_human_pos) ->

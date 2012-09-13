@@ -7,9 +7,9 @@ way non-programmers (ie humans) expect lists to act (ie usability).
 
 * Default index is 1, not 0.
 * This is no `shift` or `unshift`.
-* `.pop( 'front' )` and `.push('front', vals)` to attach before first element. 
-* `.pop( 'end'  )`  and `.push('end',  vals)` to pop/insert after last element.
-* `.front()` and `.end()` instead of `.first()` and `.last()`
+* `.pop( 'top' )` and `.push('top', vals)` to attach before first element. 
+* `.pop( 'bottom'  )`  and `.push('bottom',  vals)` to pop/insert after last element.
+* `.top()` and `.bottom()` instead of `.first()` and `.last()`
   * Why design it this way? Because index positions can be -1, -2.1, etc. 
     Non-programmers would assume `.first()` returned value at index 1, instead of -1.
 * Instead of index, you have positions. 
@@ -34,9 +34,9 @@ In your script:
 Usage: Inserting
 =====
 
-    stuff.push( "end", "red" );
-    stuff.push( "end", "blue" );
-    stuff.end(); 
+    stuff.push( "bottom", "red" );
+    stuff.push( "bottom", "blue" );
+    stuff.bottom(); 
     // => "blue"
     
 Remember, index starts with 1, not 0.
@@ -74,10 +74,10 @@ Usage: Deleting
 
 No shift or unshift.
 
-    stuff.pop('front');
+    stuff.pop('top');
     // => "red"
     
-    stuff.push( 'front', "red" );
+    stuff.push( 'top', "red" );
     // => "red"
     
 

@@ -92,57 +92,57 @@ describe 'Navigation', () ->
       l.to(3)
       assert.equal l.position(), 3
   
-  describe '.to_front()', () ->
+  describe '.to_top()', () ->
     
     it 'moves position to 0', () ->
       l = new hl.Humane_List [0,2,4]
-      l.to_front()
+      l.to_top()
       assert.equal l.position(), 1
 
     it "raises an error if length is 0", () ->
       l = new hl.Humane_List
       try
-        l.to_front()
+        l.to_top()
       catch e
         err = e
       assert.equal err.message, "Position can't be, 0, because length is: 0."
   
-  describe '.to_end()', () ->
+  describe '.to_bottom()', () ->
     
     it 'moves position to length-1', () ->
       l = new hl.Humane_List [0,2,4]
-      l.to_end()
+      l.to_bottom()
       assert.equal l.position(), 3
 
     it "raises an error if length is 0", () ->
       l = new hl.Humane_List
       try
-        l.to_end()
+        l.to_bottom()
       catch e
         err = e
       assert.equal err.message, "Position can't be, 0, because length is: 0."
     
-  describe '.is_at_front()', () ->
+  describe '.is_at_top()', () ->
 
     it 'returns true if at first position', () ->
       l = new hl.Humane_List [0,2,4,6]
-      assert.equal l.is_at_front(), true
+      assert.equal l.is_at_top(), true
 
     it 'returns false if not first position', () ->
       l = new hl.Humane_List [0,2,4,6]
       l.to(2)
-      assert.equal l.is_at_front(), false
+      assert.equal l.is_at_top(), false
 
-  describe '.is_at_end()', () ->
+  describe '.is_at_bottom()', () ->
 
     it 'returns true if at last position', () ->
       l = new hl.Humane_List [0,2,4,6]
-      l.to_end()
-      assert.equal l.is_at_end(), true
+      l.to_bottom()
+      assert.equal l.is_at_bottom(), true
 
     it 'returns false if not at last position', () ->
       l = new hl.Humane_List [0,2,4,6]
-      assert.equal l.is_at_end(), false
+      assert.equal l.is_at_bottom(), false
 
   describe '.value()', () ->
 
@@ -181,15 +181,15 @@ describe 'Navigation', () ->
 # ============================================================================
 describe 'Inspecting', () ->
   
-  describe '.front()', () ->
+  describe '.top()', () ->
     it 'retrieves first value', () ->
       l = new hl( [3,4,5] )
-      assert.equal l.front(), 3
+      assert.equal l.top(), 3
 
-  describe '.end()', () ->
+  describe '.bottom()', () ->
     it 'retrieves last value', () ->
       l = new hl( [6, 7, 8] )
-      assert.equal l.end(), 8
+      assert.equal l.bottom(), 8
 
   describe '.has_key(k)', () ->
     it 'returns false if key not found', () ->
@@ -215,16 +215,16 @@ describe 'Pushing', () ->
 
   it 'can insert to the top', () ->
     l = new hl()
-    l.push 'front', "def"
-    l.push 'front', "abc"
-    assert.equal l.front(), "abc"
+    l.push 'top', "def"
+    l.push 'top', "abc"
+    assert.equal l.top(), "abc"
 
-  it 'can insert at end', () ->
+  it 'can insert at bottom', () ->
     l = new hl()
-    l.push 'end', "second"
-    l.push 'end', "first"
-    l.push 'end', "third"
-    assert.equal l.end(), "third"
+    l.push 'bottom', "second"
+    l.push 'bottom', "first"
+    l.push 'bottom', "third"
+    assert.equal l.bottom(), "third"
 
   it 'can insert at a specified position', () ->
     l = new hl [1, 3, 4]
@@ -233,12 +233,12 @@ describe 'Pushing', () ->
 
   it 'sets a default position of 1 for first element w/o defined position', () ->
     l = new hl
-    l.push 'front', "one"
+    l.push 'top', "one"
     assert.deepEqual l.positions(), [1]
 
-  it 'sets a default position of .length+1 for pushing to end', () ->
+  it 'sets a default position of .length+1 for pushing to bottom', () ->
     l = new hl [1,2,3]
-    l.push 'end', "four"
+    l.push 'bottom', "four"
     assert.deepEqual l.positions(), [1,2,3,4]
 
   it 'adds one to all succeeding positions until positions are unique', () ->
@@ -251,9 +251,9 @@ describe 'Pushing', () ->
 
   it 'can insert both a key and value', () ->
     l = new hl()
-    l.push 'front', "three", 3
-    l.push 'front', "two", 2
-    l.push 'front', "one", 1
+    l.push 'top', "three", 3
+    l.push 'top', "two", 2
+    l.push 'top', "one", 1
 
     assert.deepEqual l.values(), [1, 2, 3]
     assert.deepEqual l.keys(),   [ ['one'], ['two'], ['three'] ]
@@ -268,21 +268,21 @@ describe 'Popping', () ->
 
   it 'can pop from the top', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    l.pop('front')
+    l.pop('top')
     assert.deepEqual l.values(), ['j', 'k', 'l']
     
   it 'returns value from the top', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    assert.equal l.pop('front'), 'h'
+    assert.equal l.pop('top'), 'h'
 
-  it 'can pop from the end', () ->
+  it 'can pop from the bottom', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    l.pop('end')
+    l.pop('bottom')
     assert.deepEqual l.values(), ['h', 'j', 'k']
     
-  it 'returns value from the end', () ->
+  it 'returns value from the bottom', () ->
     l = new hl.Humane_List ['h', 'j', 'k', 'l']
-    assert.equal l.pop('end'), 'l'
+    assert.equal l.pop('bottom'), 'l'
 
 # ============================================================================
 describe 'Aliasing:', () ->
@@ -349,17 +349,17 @@ describe 'Merging', () ->
 
   it 'can concat an array before first element', () ->
     l = new hl.Humane_List([1,2,3])
-    l.concat 'front', [-2, -1, 0]
+    l.concat 'top', [-2, -1, 0]
     assert.deepEqual l.values(), [-2, -1, 0, 1, 2, 3]
 
   it 'can concat an object after last element', () ->
     l = new hl.Humane_List( one: 1, two: 2 )
-    l.concat 'end', three: 3, four: 4
+    l.concat 'bottom', three: 3, four: 4
     assert.deepEqual l.values(), [1, 2, 3, 4]
 
   it 'keeps order of keys when merging objects', () ->
     l = new hl.Humane_List( uno: 1, dos: 2 )
-    l.concat 'front', neg_one: -1, zero: 0
+    l.concat 'top', neg_one: -1, zero: 0
     assert.deepEqual l.keys(), [ ["neg_one"], ["zero"], ["uno"], ["dos"] ]
     
 
