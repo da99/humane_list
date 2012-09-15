@@ -64,6 +64,21 @@ describe 'Inspecting', () ->
 # ============================================================================
 describe 'Pushing', () ->
 
+  it 'raises error if non-numerical position is not top or bottom', () ->
+    err = null
+    try
+      l = new hl()
+      l.push 'middled', 3
+    catch e
+      err = e
+    assert.equal err.message, "Unknown position: middled"
+
+  it 'sets new position to less than one of top value', () ->
+    l = new hl()
+    l.push 'top', 1
+    l.push 'top', 2
+    assert.deepEqual l.positions(), [0, 1]
+    
   it 'can insert to the top', () ->
     l = new hl()
     l.push 'top', "1"

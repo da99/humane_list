@@ -59,35 +59,38 @@ class Humane_List
   push: () ->
     args = arguments
     pos = args[0]
-    num_pos = if typeof(pos) is "number"
+    num_pos = if _.isNumber(pos) 
       pos
     else
       if pos is 'top'
-        1
-      else
+        if @is_empty() 
+          1
+        else
+          @first_position() - 1
+
+      else if pos is 'bottom'
         last = @positions().pop()
         (last && (last + 1)) || @d.core.length + 1
+      else
+        throw new Error "Unknown position: #{pos}"
 
     # Create new element.
     switch args.length
       when 2
-        e = if num_pos
-          ( new Element num_pos, [], args[1] )
-        else
-          ( new Element args[1] )
+        e = ( new Element num_pos, [], args[1] )
           
       when 3
-        e = if num_pos
-          ( new Element num_pos, args[1], args[2] )
-        else
-          ( new Element args[1], args[2] )
+        e = ( new Element num_pos, args[1], args[2] )
           
       else
         throw( new Error("Invalid arguments: #{arguments}") )
         
       
     # Insert new element at top.
-    @d.core.unshift e
+    if pos is 'bottom'
+      @d.core.push e
+    else
+      @d.core.unshift e
     
     # Sort based on human position.
     @d.core = @d.core.sort (a,b) ->
