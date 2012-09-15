@@ -66,16 +66,17 @@ describe 'Pushing', () ->
 
   it 'can insert to the top', () ->
     l = new hl()
-    l.push 'top', "def"
-    l.push 'top', "abc"
-    assert.equal l.top(), "abc"
+    l.push 'top', "1"
+    l.push 'top', "2"
+    l.push 'top', "3"
+    assert.deepEqual l.values(), ['3', '2', '1']
 
   it 'can insert at bottom', () ->
     l = new hl()
     l.push 'bottom', "second"
     l.push 'bottom', "first"
     l.push 'bottom', "third"
-    assert.equal l.bottom(), "third"
+    assert.deepEqual l.values(), ["second", "first", "third"]
 
   it 'can insert at a specified position', () ->
     l = new hl [1, 3, 4]
