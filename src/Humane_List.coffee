@@ -58,21 +58,29 @@ class Humane_List
 
   push: () ->
     args = arguments
-    pos = args[0]
+    pos  = args[0]
+    
     num_pos = if _.isNumber(pos) 
       pos
-    else
-      if pos is 'top'
-        if @is_empty() 
-          1
-        else
-          @first_position() - 1
-
-      else if pos is 'bottom'
-        last = @positions().pop()
-        (last && (last + 1)) || @d.core.length + 1
+      
+    else if pos in ['top', 'bottom'] and @is_empty()
+      1
+      
+    else if pos is 'top'
+      int = parseInt(@first_position())
+      floor = Math.floor(@first_position())
+      if @first_position() is 1
+        1
+      else if int is floor
+        int - 1
       else
-        throw new Error "Unknown position: #{pos}"
+        floor
+
+    else if pos is 'bottom'
+      Math.ceil @positions().pop()
+      
+    else
+      throw new Error "Unknown position: #{pos}"
 
     # Create new element.
     switch args.length

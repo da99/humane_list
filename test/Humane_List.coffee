@@ -64,7 +64,12 @@ describe 'Inspecting', () ->
 # ============================================================================
 describe 'Pushing', () ->
 
-  it 'raises error if non-numerical position is not top or bottom', () ->
+  it 'can insert at a specified position', () ->
+    l = new hl [1, 3, 4]
+    l.push 2, "dos"
+    assert.deepEqual l.values(), [1, "dos", 3, 4]
+
+  it 'raises error if non-numerical position is not "top" or "bottom"', () ->
     err = null
     try
       l = new hl()
@@ -72,41 +77,6 @@ describe 'Pushing', () ->
     catch e
       err = e
     assert.equal err.message, "Unknown position: middled"
-
-  it 'sets new position to less than one of top value', () ->
-    l = new hl()
-    l.push 'top', 1
-    l.push 'top', 2
-    assert.deepEqual l.positions(), [0, 1]
-    
-  it 'can insert to the top', () ->
-    l = new hl()
-    l.push 'top', "1"
-    l.push 'top', "2"
-    l.push 'top', "3"
-    assert.deepEqual l.values(), ['3', '2', '1']
-
-  it 'can insert at bottom', () ->
-    l = new hl()
-    l.push 'bottom', "second"
-    l.push 'bottom', "first"
-    l.push 'bottom', "third"
-    assert.deepEqual l.values(), ["second", "first", "third"]
-
-  it 'can insert at a specified position', () ->
-    l = new hl [1, 3, 4]
-    l.push 2, "dos"
-    assert.deepEqual l.values(), [1, "dos", 3, 4]
-
-  it 'sets a default position of 1 for first element w/o defined position', () ->
-    l = new hl
-    l.push 'top', "one"
-    assert.deepEqual l.positions(), [1]
-
-  it 'sets a default position of .length+1 for pushing to bottom', () ->
-    l = new hl [1,2,3]
-    l.push 'bottom', "four"
-    assert.deepEqual l.positions(), [1,2,3,4]
 
   it 'adds one to all succeeding positions until positions are unique', () ->
     l = new hl [1, 2, 3]
@@ -116,6 +86,45 @@ describe 'Pushing', () ->
     assert.deepEqual l.positions(), [ 1,  2, 3, 3.1, 4, 5]
     assert.deepEqual l.values(),    [ 1, "dos", 2, 2.1, 3, 'five']
 
+  it 'sorts elements using numerical sorting of position: 1..20', () ->
+    arr = _.range(1,21)
+    l = new hl(arr)
+    assert.deepEqual l.values(), arr
+
+describe 'Pushing "top"', () ->
+    
+  it 'can insert to the top', () ->
+    l = new hl()
+    l.push 'top', "1"
+    l.push 'top', "2"
+    l.push 'top', "3"
+    assert.deepEqual l.values(), ['3', '2', '1']
+  
+  it 'sets new position to less than one of top value', () ->
+    l = new hl()
+    l.push 2, 2
+    l.push 3, 3
+    l.push 'top', 1
+    assert.deepEqual l.positions(), [ 1, 2, 3]
+
+  it "sets new position to one if original first position is 1", () ->
+    l = new hl [1,2,3]
+    l.push 'top', 0
+    assert.deepEqual l.positions(), [ 1, 2, 3, 4 ]
+
+  it "sets new position to newest whole number minus 1 if original first position is less than one.", () ->
+    l = new hl 
+    l.push -1.1, "-1.1"
+    l.push 0.8, "0.8"
+    l.push 0.9, "0.9"
+    l.push 'top', "-2"
+    assert.deepEqual l.positions(), [ -2, -1.1, 0.8, 0.9 ]
+
+  it 'sets a default position of 1 for first element w/o defined position', () ->
+    l = new hl
+    l.push 'top', "one"
+    assert.deepEqual l.positions(), [1]
+    
   it 'can insert both a key and value', () ->
     l = new hl()
     l.push 'top', "three", 3
@@ -125,11 +134,30 @@ describe 'Pushing', () ->
     assert.deepEqual l.values(), [1, 2, 3]
     assert.deepEqual l.keys(),   [ ['one'], ['two'], ['three'] ]
 
-  it 'sorts elements using numerical sorting of position: 1..20', () ->
-    arr = _.range(1,21)
-    l = new hl(arr)
-    assert.deepEqual l.values(), arr
 
+describe 'Pushing "bottom"', () ->
+  
+  it 'can insert at bottom', () ->
+    l = new hl()
+    l.push 'bottom', "second"
+    l.push 'bottom', "first"
+    l.push 'bottom', "third"
+    assert.deepEqual l.values(), ["second", "first", "third"]
+
+  it 'sets a default position of .length+1 for pushing to bottom', () ->
+    l = new hl [1,2,3]
+    l.push 'bottom', "four"
+    assert.deepEqual l.positions(), [1,2,3,4]
+
+  it 'sets the next whole number for fractional positions', () ->
+    l = new hl()
+    l.push 3.1, "3.1"
+    l.push 4.8, "4.8"
+    l.push 'bottom', "5"
+    assert.deepEqual l.positions(), [3.1, 4.8, 5]
+
+
+    
 # ============================================================================
 describe 'Popping', () ->
 
