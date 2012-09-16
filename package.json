@@ -1,6 +1,6 @@
 {
   "name": "humane_list",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A combination of array and kv structure.",
   "main": "lib/Humane_List.js",
   "scripts": {
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "underscore": "*",
-    "rw_ize": "*", 
+    "rw_ize": "*",
     "forward_these_functions": "*"
   },
   "author": "da99",
