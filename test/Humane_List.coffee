@@ -113,8 +113,8 @@ describe 'Pushing', () ->
     l.push 2.1, "2.1"
     l.push 2, "dos"
     l.push 5, "five"
-    assert.deepEqual l.values(),    [ 1, "dos", 2, 2.1, 3, 'five']
     assert.deepEqual l.positions(), [ 1,  2, 3, 3.1, 4, 5]
+    assert.deepEqual l.values(),    [ 1, "dos", 2, 2.1, 3, 'five']
 
   it 'can insert both a key and value', () ->
     l = new hl()

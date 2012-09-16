@@ -98,11 +98,11 @@ class Humane_List
       
     # Update positions.
     if @d.core.length > 1
-      for last_v, i in @d.core
-        v = @d.core[i+1]
-        if v
-          if last_v.position() >= v.position()
-            v.update_position( v.position() + 1 )
+      for v, i in @d.core
+        next_v = @d.core[i+1]
+        if next_v
+          if v.position() >= next_v.position()
+            next_v.update_position( next_v.position() + 1 )
       
 
 

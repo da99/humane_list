@@ -1,9 +1,14 @@
 
 class Element
 
+  @object_id: () ->
+    @_oid_ ?= 0
+    ++@_oid_
+    
   constructor: () ->
 
     @d = {}
+    @d.object_id = @constructor.object_id()
 
     switch arguments.length
 
@@ -26,6 +31,9 @@ class Element
     else
       [@d.keys]
 
+  object_id: () ->
+    @d.object_id
+    
   keys: () ->
     @d.keys
 
