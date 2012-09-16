@@ -19,10 +19,21 @@ describe "Position", () ->
   describe '.value()', () ->
 
     it 'returns the value of current position', () ->
-
       p = new Position( new hl [1,2,3] )
       p.downward()
       assert.equal p.value(), 2
+
+    it 'raises an error if position of element has changed.', () ->
+      l = new hl [1,2,3]
+      p = l.position()
+      p.downward()
+      l.push 'top', "new"
+      try
+        p.value()
+      catch e
+        err = e
+      assert.equal err.message, "Position of element has changed from 2 to 3"
+
       
   describe '.downward()', () ->
 
@@ -60,6 +71,17 @@ describe "Position", () ->
         
       assert.equal err.message, "Position already at end: 3."
       
+    it 'raises an error if position of element has changed.', () ->
+      l = new hl [1,2,3]
+      p = l.position()
+      p.downward()
+      l.push 'top', "new"
+      try
+        p.downward()
+      catch e
+        err = e
+      assert.equal err.message, "Position of element has changed from 2 to 3"
+      
   describe '.upward()', () ->
 
     it 'moves position upward by one', () ->
@@ -95,6 +117,17 @@ describe "Position", () ->
       catch e
         err = e
       assert.equal err.message, "No valid position before: 1."
+      
+    it 'raises an error if position of element has changed.', () ->
+      l = new hl [1,2,3]
+      p = l.position()
+      p.downward()
+      l.push 'top', "new"
+      try
+        p.upward()
+      catch e
+        err = e
+      assert.equal err.message, "Position of element has changed from 2 to 3"
 
 
   describe '.to(N)', () ->
@@ -157,6 +190,12 @@ describe "Position", () ->
       p.to(4)
       assert.equal p.value(), 6
 
+    it 'returns value even if position of element has changed', () ->
+      l = new hl([1,2,3])
+      p = l.position()
+      p.downward()
+      assert.equal p.value(), 2
+
   describe '.next()', () ->
 
     it 'returns the next value', () ->
@@ -179,6 +218,17 @@ describe "Position", () ->
         err = e
       assert.equal err.message, "No valid position after: 1."
 
+    it 'raises an error if position of element has changed.', () ->
+      l = new hl [1,2,3]
+      p = l.position()
+      p.downward()
+      l.push 'top', "new"
+      try
+        p.next()
+      catch e
+        err = e
+      assert.equal err.message, "Position of element has changed from 2 to 3"
+
   describe '.previous()', () ->
 
     it 'returns the previous value', () ->
@@ -199,4 +249,15 @@ describe "Position", () ->
       catch e
         err = e
       assert.equal err.message, "No valid position before: 1."
+
+    it 'raises an error if position of element has changed.', () ->
+      l = new hl [1,2,3]
+      p = l.position()
+      p.downward()
+      l.push 'top', "new"
+      try
+        p.previous()
+      catch e
+        err = e
+      assert.equal err.message, "Position of element has changed from 2 to 3"
 

@@ -14,7 +14,10 @@ class Humane_List
       else
         @push('bottom', k, v) for k, v of vals
         
-  # =============== Navigation
+  # =============================================
+  #         Navigation
+  # =============================================
+  
   position: () ->
     new Position(this)
 
@@ -39,7 +42,9 @@ class Humane_List
   is_empty: () -> 
     @d.core.length is 0
 
-  # ================ Create, Read, Update, Delete
+  # =============================================
+  #         Create, Read, Update, Delete
+  # =============================================
   
   length: () ->
     @d.core.length
@@ -113,6 +118,27 @@ class Humane_List
             next_v.update_position( next_v.position() + 1 )
       
 
+  # =============================================
+  #               Inspection
+  # =============================================
+
+  @to_hash: (e) ->
+    return null unless e
+    info = 
+      position:  e.position()
+      keys:      e.keys()
+      value:     e.value()
+      object_id: e.object_id()
+
+  describe_position: (n) ->
+    ele = _.find @d.core, (e) ->
+      e.position() is n
+    @constructor.to_hash(ele)
+
+  describe_object_id: (oid) ->
+    ele = _.find @d.core, (e) ->
+      e.object_id() is oid
+    @constructor.to_hash(ele)
 
   # =============================================
   #               Inspecting keys

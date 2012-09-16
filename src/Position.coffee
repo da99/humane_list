@@ -8,15 +8,26 @@ class Position
   rw.ize(this)
   forward @prototype, "list"
 
-  @read_able 'list', 'position'
+  @read_able 'list', 'position', 'object_id_at_position'
 
   constructor: ( list ) ->
     @rw_data 'list', list
-    @rw_data 'position', @list().first_position()
+    if @list().is_empty()
+      @rw_data 'position', @list().first_position()
+    else
+      @to @list().first_position()
 
   value: () ->
+    @throw_if_position_has_changed() 
     @list().at_position( @position() )
     
+  throw_if_position_has_changed: () ->
+    return null unless _.isNumber( @object_id_at_position() )
+    pos_desc = @list().describe_position( @position() )
+    id_desc  = @list().describe_object_id( @object_id_at_position() )
+    if not ( pos_desc.object_id is @object_id_at_position() )
+      throw new Error "Position of element has changed from #{@position()} to #{id_desc.position}"
+
   # ===============================
   #          Questions 
   # ===============================
@@ -32,23 +43,31 @@ class Position
   # ===============================
   
   downward: () ->
+    @throw_if_position_has_changed() 
+      
     if @position() is @list().last_position()
       throw new Error("Position already at end: #{@position()}.")
     @to @list().position_after( @position() )
     
   upward: () ->
+    @throw_if_position_has_changed() 
+    
     prev = @list().position_before( @position() )
     if not _.isNumber(prev)
       throw new Error("No valid position before: #{@position()}.")
     @to prev
     
   next: () ->
+    @throw_if_position_has_changed() 
+    
     next = @list().position_after( @position() ) 
     if not _.isNumber(next)
       throw new Error "No valid position after: #{@position()}."
     @list().at_position next
 
   previous: () ->
+    @throw_if_position_has_changed() 
+    
     prev = @list().position_before( @position() )
     if not _.isNumber(prev)
       throw new Error "No valid position before: #{@position()}."
@@ -73,6 +92,8 @@ class Position
       throw new Error("Position can't be, #{n}, because length is: #{@list().length()}.")
     
     @rw_data 'position', n
+    if not @list().is_empty()
+      @rw_data 'object_id_at_position', (@list().describe_position(n)).object_id 
 
 
 module.exports = Position
