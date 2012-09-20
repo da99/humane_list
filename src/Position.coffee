@@ -11,9 +11,9 @@ class Position
   @read_able 'list', 'position', 'object_id_at_position'
 
   constructor: ( list ) ->
-    @rw_data 'list', list
+    @rw 'list', list
     if @list().is_empty()
-      @rw_data 'position', @list().first_position()
+      @rw 'position', @list().first_position()
     else
       @to @list().first_position()
 
@@ -91,9 +91,9 @@ class Position
     if n > @list().last_position()
       throw new Error("Position can't be, #{n}, because length is: #{@list().length()}.")
     
-    @rw_data 'position', n
+    @rw 'position', n
     if not @list().is_empty()
-      @rw_data 'object_id_at_position', (@list().describe_position(n)).object_id 
+      @rw 'object_id_at_position', (@list().describe_position(n)).object_id 
 
 
 module.exports = Position
